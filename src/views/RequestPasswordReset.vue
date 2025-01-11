@@ -13,13 +13,13 @@
         <div class="d-flex align-center mb-4 justify-center">
           <div class="mr-4">
             <VImg
-              src="@/assets/fractured-labs-logo.png"
+              src="@/assets/atomic-logo.svg"
               alt="Logo"
-              width="50"
+              width="200"
             />
           </div>
           <p class="font-weight-bold text-h5">
-            Fractured Labs
+            Atomic Docs
           </p>
         </div>
         <VForm
