@@ -1,6 +1,4 @@
 <template>
-  <!--  <pre>{{ navItems }}</pre>-->
-
   <VListGroup
     v-if="navItems.type === 'directory'"
     :value="navItems.label"
