@@ -54,6 +54,7 @@
               open-on-hover
               open-on-focus
             >
+              <!-- TODO: move to a component. https://github.com/nickberens360/atomic-docs-vuetify/issues/6-->
               <v-list>
                 <template
                   v-for="(item, key) in filteredDirectoryStructure"
@@ -151,6 +152,7 @@
                   </v-list-item>
                 </template>
               </v-list>
+              <!-- move to component -->
             </v-menu>
           </div>
         </VCol>
