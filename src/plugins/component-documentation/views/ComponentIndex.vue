@@ -1,5 +1,5 @@
 <template>
-  <AppBarTest />
+  <AppBar />
   <AppNavigationDrawer />
   <VMain>
     <v-container fluid>
@@ -81,7 +81,7 @@
 
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import AppBarTest from '../components/AppBarTest.vue';
+import AppBar from '../components/AppBar.vue';
 import AppNavigationDrawer from '../components/AppNavigationDrawer.vue';
 import ComponentNavigation from '../components/ComponentNavigation.vue';
 
