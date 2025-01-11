@@ -21,14 +21,16 @@
         v-model="width"
         label="width"
         thumb-label
-        max="900"
+        max="600"
+        hide-details
       />
       <v-slider
         v-if="item.name === 'height'"
         v-model="height"
         thumb-label
         label="height"
-        max="350"
+        max="600"
+        hide-details
       />
       <v-menu
         v-if="item.name === 'bgColor'"
@@ -59,6 +61,7 @@
         thumb-label
         label="borderRadius"
         max="100"
+        hide-details
       />
     </template>
   </ExampleComponentUsage>

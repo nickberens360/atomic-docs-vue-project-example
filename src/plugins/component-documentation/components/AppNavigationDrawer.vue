@@ -14,21 +14,8 @@
       color="background"
     >
       <ComponentNavigation />
-
-      <v-list
-        density="compact"
-        nav
-        bg-color="background"
-      >
-        <v-list-item
-          prepend-icon="mdi-package-variant-closed"
-          title="Component Docs"
-          value="componentDocs"
-          :to="{ name: 'componentDocs' }"
-        />
-      </v-list>
     </v-card>
-    <template #append>
+    <!--    <template #append>
       <VList bg-color="background">
         <v-list-item
           prepend-icon="mdi-logout"
@@ -36,14 +23,15 @@
           :to="{ name: 'login' }"
         />
       </VList>
-    </template>
+    </template>-->
   </VNavigationDrawer>
 </template>
 
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
 import { useAppStore } from "@/stores/app";
-import ComponentNavigation from "../plugins/component-documentation/components/ComponentNavigation.vue";
+import ComponentNavigation from "./ComponentNavigation.vue";
+
 const userStore = useUserStore();
 const appStore = useAppStore();
 const drawer = ref(true);

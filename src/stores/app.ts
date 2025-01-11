@@ -13,7 +13,7 @@ export const useAppStore = defineStore('app', {
       timeout: 3000,
       location: '',
     },
-    isAppRailOpen: true,
+    isAppRailOpen: false,
     isAppNavDrawerOpen: true,
   }),
   actions: {
