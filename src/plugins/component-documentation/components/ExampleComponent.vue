@@ -25,7 +25,7 @@
     <slot name="props">
       <VDataTable
         :headers="propHeaders"
-        :items="propItems"
+        :items="computedPropItems"
         hide-default-footer
       >
         <template
@@ -114,14 +114,23 @@ export default {
       type: Array,
       default: () => [],
     },
+    propItems: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   computed: {
-    propItems() {
-      if (!this.component) {
-        return [];
+    computedPropItems() {
+      // Use the propItems prop if it's provided and not empty
+      if (this.propItems && this.propItems.length > 0) {
+        return this.propItems;
       }
-      return generatePropsItems(this.component);
+      // Otherwise, generate the props from the component if it's provided
+      if (this.component) {
+        return generatePropsItems(this.component);
+      }
+      return [];
     },
     propHeaders() {
       return getPropsHeaders();

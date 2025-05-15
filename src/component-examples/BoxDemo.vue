@@ -1,8 +1,9 @@
 <template>
   <ExampleComponentUsage
-    :component="BoxDemo"
+    :component="null"
     :event-items="eventItems"
     :slot-items="slotItems"
+    :prop-items="propItems"
     expand-props-table
     description="A simple box component."
   >
@@ -87,6 +88,33 @@ const slotItems = [
     name: 'default',
     content: 'null',
     description: 'Slot for custom actions.',
+  },
+];
+
+const propItems = [
+  {
+    name: 'height',
+    type: 'String',
+    required: 'false',
+    default: '"150px"',
+  },
+  {
+    name: 'width',
+    type: 'String',
+    required: 'false',
+    default: '"150px"',
+  },
+  {
+    name: 'bgColor',
+    type: 'String',
+    required: 'false',
+    default: '"#ff0000"',
+  },
+  {
+    name: 'borderRadius',
+    type: 'String',
+    required: 'false',
+    default: '"8px"',
   },
 ];
 
