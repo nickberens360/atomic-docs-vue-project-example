@@ -7,28 +7,27 @@
       <!-- If item is a component -->
       <v-list-item
         v-if="item.type === 'component'"
+        prepend-icon="mdi-file-document"
         link
         color="primary"
         @click="handleNavClick(item)"
       >
-        <template #prepend>
-          <FileIcon :size="20" />
-        </template>
         <v-list-item-title>{{ item.label }}</v-list-item-title>
       </v-list-item>
 
       <!-- If item is a directory -->
       <v-list-item
         v-else-if="item.type === 'directory'"
+        prepend-icon="mdi-folder"
         link
         color="primary"
       >
-        <template #prepend>
-          <FolderIcon :size="20" />
-        </template>
         <v-list-item-title>{{ item.label }}</v-list-item-title>
         <template #append>
-          <ArrowRightIcon :size="16" />
+          <v-icon
+            icon="mdi-menu-right"
+            size="x-small"
+          />
         </template>
 
         <!-- Recursive Menu for Directories -->
@@ -58,7 +57,10 @@
               >
                 <v-list-item-title>{{ child.label }}</v-list-item-title>
                 <template #append>
-                  <ArrowRightIcon :size="16" />
+                  <v-icon
+                    icon="mdi-menu-right"
+                    size="x-small"
+                  />
                 </template>
 
                 <!-- Further Recursive Submenu -->
@@ -101,13 +103,6 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import FileIcon from '@/components/icons/FileIcon.vue';
-import FolderIcon from '@/components/icons/FolderIcon.vue';
-import ArrowRightIcon from '@/components/icons/ArrowRightIcon.vue';
-
-interface ComponentDocPlugin {
-  convertPathToExampleName: (path: string) => string;
-}
 
 interface ComponentItem {
   type: 'component';
@@ -124,11 +119,10 @@ interface DirectoryItem {
 }
 
 type NavigationItem = ComponentItem | DirectoryItem;
-type DirectoryStructure = Record<string, NavigationItem>;
 
 interface Props {
   filterText?: string;
-  onNavClick?: ((arg: NavigationItem) => void) | null;
+  onNavClick?: ((arg: ComponentItem) => void) | null;
   bgColor?: string;
 }
 
@@ -138,15 +132,19 @@ const props = withDefaults(defineProps<Props>(), {
   bgColor: 'background'
 });
 
+interface ComponentDocPlugin {
+  convertPathToExampleName: (path: string) => string;
+}
+
 const componentDocPlugin = inject('componentDocPlugin') as ComponentDocPlugin;
 const router = useRouter();
 
-const directoryStructure = computed<DirectoryStructure>(() => {
-  return Object.keys(import.meta.glob('@/components/**/*.vue')).reduce((accumulator: DirectoryStructure, filePath: string) => {
+const directoryStructure = computed<Record<string, NavigationItem>>(() => {
+  return Object.keys(import.meta.glob('@/components/**/*.vue')).reduce<Record<string, NavigationItem>>((accumulator, filePath) => {
     const relativePath = filePath.split('components/').slice(1).join('');
     const exampleComponent = componentDocPlugin.convertPathToExampleName(relativePath);
     const pathSegments = relativePath.split('/');
-    let lastRef: Record<string, any> = accumulator;
+    let lastRef = accumulator;
     pathSegments.forEach((pathSegment) => {
       if (pathSegment.endsWith('.vue')) {
         lastRef[pathSegment] = { type: 'component', label: pathSegment, relativePath, exampleComponent };
@@ -161,8 +159,11 @@ const directoryStructure = computed<DirectoryStructure>(() => {
   }, {});
 });
 
-function filterNestedStructure(structure: DirectoryStructure, filterText: string): DirectoryStructure {
-  return Object.entries(structure).reduce((accumulator: DirectoryStructure, [key, value]) => {
+function filterNestedStructure(
+  structure: Record<string, NavigationItem>,
+  filterText: string
+): Record<string, NavigationItem> {
+  return Object.entries(structure).reduce<Record<string, NavigationItem>>((accumulator, [key, value]) => {
     if (value.type === 'directory' && Object.keys(value.children).length > 0) {
       const filteredChildren = filterNestedStructure(value.children, filterText);
 
@@ -177,23 +178,20 @@ function filterNestedStructure(structure: DirectoryStructure, filterText: string
   }, {});
 }
 
-const finalStructure = computed<DirectoryStructure>(() => {
+const finalStructure = computed<Record<string, NavigationItem>>(() => {
   return filterNestedStructure(directoryStructure.value, props.filterText);
 });
 
-function handleNavClick(arg: NavigationItem): void {
+function handleNavClick(arg: ComponentItem): void {
   if (props.onNavClick) {
     props.onNavClick(arg);
     return;
   }
 
-  // Type guard to ensure we only use exampleComponent on ComponentItem
-  if (arg.type === 'component') {
-    router.push({
-      name: 'componentDoc',
-      params: { componentName: arg.exampleComponent },
-      query: { relativePath: arg.relativePath }
-    });
-  }
+  router.push({
+    name: 'componentDoc',
+    params: { componentName: arg.exampleComponent },
+    query: { relativePath: arg.relativePath }
+  });
 }
 </script>

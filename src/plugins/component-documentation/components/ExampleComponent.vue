@@ -93,60 +93,70 @@
     </slot>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
 import {
   generatePropsItems,
   getPropsHeaders,
   getEventHeaders,
   getSlotHeaders
-} from '@/plugins/component-documentation/utils/docGenerator.js';
+} from '@/plugins/component-documentation/utils/docGenerator.ts';
 
-export default {
-  props: {
-    component: {
-      type: Object,
-      required: false,
-      default: () => undefined,
-    },
-    description: {
-      type: String,
-      default: '',
-    },
-    eventItems: {
-      type: Array,
-      default: () => [],
-    },
-    slotItems: {
-      type: Array,
-      default: () => [],
-    },
-    propItems: {
-      type: Array,
-      default: () => [],
-    },
-  },
+// Define interfaces for the component's props
+interface Component {
+  props?: Record<string, any>;
+}
 
-  computed: {
-    computedPropItems() {
-      // Use the propItems prop if it's provided and not empty
-      if (this.propItems && this.propItems.length > 0) {
-        return this.propItems;
-      }
-      // Otherwise, generate the props from the component if it's provided
-      if (this.component) {
-        return generatePropsItems(this.component);
-      }
-      return [];
-    },
-    propHeaders() {
-      return getPropsHeaders();
-    },
-    eventHeaders() {
-      return getEventHeaders();
-    },
-    slotHeaders() {
-      return getSlotHeaders();
-    },
-  },
-};
+interface PropItem {
+  name: string;
+  type: string;
+  required: string;
+  default: string;
+}
+
+interface Header {
+  title: string;
+  key: string;
+}
+
+interface Props {
+  component?: Component;
+  description?: string;
+  eventItems?: any[];
+  slotItems?: any[];
+  propItems?: PropItem[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  component: undefined,
+  description: '',
+  eventItems: () => [],
+  slotItems: () => [],
+  propItems: () => [],
+});
+
+// Computed properties
+const computedPropItems = computed<PropItem[]>(() => {
+  // Use the propItems prop if it's provided and not empty
+  if (props.propItems && props.propItems.length > 0) {
+    return props.propItems;
+  }
+  // Otherwise, generate the props from the component if it's provided
+  if (props.component) {
+    return generatePropsItems(props.component);
+  }
+  return [];
+});
+
+const propHeaders = computed<Header[]>(() => {
+  return getPropsHeaders();
+});
+
+const eventHeaders = computed<Header[]>(() => {
+  return getEventHeaders();
+});
+
+const slotHeaders = computed<Header[]>(() => {
+  return getSlotHeaders();
+});
 </script>

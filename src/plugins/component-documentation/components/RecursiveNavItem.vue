@@ -20,7 +20,7 @@
       <RecursiveNavItem
         v-if="child.type === 'directory'"
         :nav-items="child"
-        @nav-click="$emit('nav-click', $event)"
+        @nav-click="emit('nav-click', $event)"
       />
 
       <VListItem
@@ -28,7 +28,7 @@
         :title="child.label"
         :value="child.label"
         bg-color="transparent"
-        @click="$emit('nav-click', child)"
+        @click="emit('nav-click', child)"
       />
     </template>
   </VListGroup>
@@ -36,26 +36,46 @@
     v-else
     :title="navItems.label"
     :value="navItems.label"
-    @click="$emit('nav-click', navItems)"
+    @click="emit('nav-click', navItems)"
   />
 </template>
-<script>
-export default {
-  name: 'RecursiveNavItem',
-  props: {
-    navItems: {
-      type: Object,
-      required: true,
-      default: () => ({})
-    },
-  },
-  emits: ['nav-click'],
-  computed: {
-    sortedChildren() {
-      return Object.values(this.navItems.children || {}).sort((a) => a.type === 'directory' ? -1 : 1);
-    },
-  }
-};
+<script setup lang="ts">
+import { computed } from 'vue';
+
+// Define interfaces for the component's props
+interface ComponentNavItem {
+  type: 'component';
+  label: string;
+  relativePath?: string;
+  exampleComponent?: string;
+}
+
+interface DirectoryNavItem {
+  type: 'directory';
+  label: string;
+  relativePath?: string;
+  children: Record<string, NavItem>;
+}
+
+type NavItem = ComponentNavItem | DirectoryNavItem;
+
+// Define props
+interface Props {
+  navItems: NavItem;
+}
+
+const props = defineProps<Props>();
+
+// Define emits
+const emit = defineEmits<{
+  (e: 'nav-click', item: NavItem): void;
+}>();
+
+// Computed properties
+const sortedChildren = computed<NavItem[]>(() => {
+  if (props.navItems.type !== 'directory') return [];
+  return Object.values(props.navItems.children || {}).sort((a) => a.type === 'directory' ? -1 : 1);
+});
 </script>
 <style lang="scss" scoped>
 :deep(.v-icon){

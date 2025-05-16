@@ -77,7 +77,7 @@
   </VMain>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -85,10 +85,18 @@ import AppBar from '../components/AppBar.vue';
 import AppNavigationDrawer from '../components/AppNavigationDrawer.vue';
 import ComponentNavigation from '../components/ComponentNavigation.vue';
 
-const router = useRouter();
-const filterText = ref('');
+// Import the ComponentItem interface from the types used in ComponentNavigation
+interface ComponentItem {
+  type: 'component';
+  label: string;
+  relativePath: string;
+  exampleComponent: string;
+}
 
-function handleNavClick(arg) {
+const router = useRouter();
+const filterText = ref<string>('');
+
+function handleNavClick(arg: ComponentItem): void {
   router.push({
     name: 'componentDoc',
     params: { componentName: arg.exampleComponent },

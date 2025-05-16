@@ -23,11 +23,33 @@
   </VContainer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, inject } from 'vue';
-import ComponentNotDocumented from '../components/ComponentNotDocumented';
-const componentDocPlugin = inject('componentDocPlugin');
-const exampleComponents = {};
+import ComponentNotDocumented from '../components/ComponentNotDocumented.vue';
+
+// Define a custom type for component definitions
+type ComponentType = any;
+
+// Define the interface for the component documentation plugin
+interface ComponentDocPlugin {
+  convertPathToExampleName: (path: string) => string;
+  componentModules: Record<string, () => Promise<any>>;
+  exampleModules: Record<string, () => Promise<any>>;
+}
+
+// Define the interface for the example components
+interface ExampleComponent {
+  default: ComponentType;
+}
+
+// Define the interface for the props
+interface Props {
+  relativePath: string;
+  componentName: string;
+}
+
+const componentDocPlugin = inject('componentDocPlugin') as ComponentDocPlugin;
+const exampleComponents: Record<string, ExampleComponent> = {};
 const importComponentPromises = Object.entries(componentDocPlugin.exampleModules)
   .map(async ([path, moduleImport]) => {
     const relativePath = path.split('component-examples/').slice(1).join('');
@@ -41,20 +63,11 @@ const importComponentPromises = Object.entries(componentDocPlugin.exampleModules
   });
 await Promise.all(importComponentPromises);
 
-const props = defineProps({
-  relativePath: {
-    type: String,
-    required: true
-  },
-  componentName: {
-    type: String,
-    required: true
-  },
-});
+const props = defineProps<Props>();
 
-const componentName = computed(() => props.relativePath.split('/').pop().replace('.vue', ''));
+const componentName = computed<string>(() => props.relativePath.split('/').pop()?.replace('.vue', '') || '');
 
-const currentComponent = computed(() => {
+const currentComponent = computed<ComponentType>(() => {
   if (exampleComponents[props.componentName]) {
     return exampleComponents[props.componentName].default;
   } else {
