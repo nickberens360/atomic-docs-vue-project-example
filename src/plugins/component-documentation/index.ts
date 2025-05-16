@@ -1,10 +1,12 @@
+import { App } from 'vue';
 import ExampleComponent from './components/ExampleComponent.vue';
 
 export default {
-  install(app) {
+  install(app: App) {
     const componentModules = import.meta.glob('@/components/**/*.vue');
     const exampleModules = import.meta.glob('@/component-examples/**/*.vue');
     const enableDocs = import.meta.env.VITE_ENABLE_COMPONENT_DOCS === 'true';
+
     if (enableDocs) {
       app.provide('componentDocPlugin', {
         convertPathToExampleName,
@@ -16,7 +18,7 @@ export default {
   }
 };
 
-function convertPathToExampleName(path) {
+function convertPathToExampleName(path: string): string {
   return 'Example' + path.replaceAll(' ', '-')
     .replaceAll('.vue', '')
     .split('/')

@@ -44,9 +44,9 @@ export default {
   name: 'RecursiveNavItem',
   props: {
     navItems: {
-      type: [Array, Object],
+      type: Object,
       required: true,
-      default: () => []
+      default: () => ({})
     },
   },
   emits: ['nav-click'],

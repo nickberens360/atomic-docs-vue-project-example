@@ -13,7 +13,7 @@ This plugin is intended to provide a framework for documenting usage of componen
 
 Currently this plugin makes some assumptions about project folder structure. Components to be documented should be in the `components` directory at the root of the `@` alias for the project and the documentation for those components should be in the `component-examples` directory at the root of the `@` alias for the project.
 
-You will need to add the documentation routes to your router, the can be imported from the plugin's `routes.js` file.
+You will need to add the documentation routes to your router, the can be imported from the plugin's `routes.ts` file.
 
 ## Dependencies
 

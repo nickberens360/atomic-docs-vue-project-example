@@ -100,37 +100,52 @@
   </v-list>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 
-const props = defineProps({
-  filterText: {
-    type: String,
-    required: false,
-    default: ''
-  },
-  onNavClick: {
-    type: Function,
-    default: null,
-    required: false
-  },
-  bgColor: {
-    type: String,
-    default: 'background',
-    required: false
-  }
+interface ComponentDocPlugin {
+  convertPathToExampleName: (path: string) => string;
+}
+
+interface ComponentItem {
+  type: 'component';
+  label: string;
+  relativePath: string;
+  exampleComponent: string;
+}
+
+interface DirectoryItem {
+  type: 'directory';
+  label: string;
+  relativePath: string;
+  children: Record<string, ComponentItem | DirectoryItem>;
+}
+
+type NavigationItem = ComponentItem | DirectoryItem;
+type DirectoryStructure = Record<string, NavigationItem>;
+
+interface Props {
+  filterText?: string;
+  onNavClick?: ((arg: NavigationItem) => void) | null;
+  bgColor?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  filterText: '',
+  onNavClick: null,
+  bgColor: 'background'
 });
 
-const componentDocPlugin = inject('componentDocPlugin');
+const componentDocPlugin = inject('componentDocPlugin') as ComponentDocPlugin;
 const router = useRouter();
 
-const directoryStructure = computed(() => {
-  return Object.keys(import.meta.glob('@/components/**/*.vue')).reduce((accumulator, filePath) => {
+const directoryStructure = computed<DirectoryStructure>(() => {
+  return Object.keys(import.meta.glob('@/components/**/*.vue')).reduce((accumulator: DirectoryStructure, filePath: string) => {
     const relativePath = filePath.split('components/').slice(1).join('');
     const exampleComponent = componentDocPlugin.convertPathToExampleName(relativePath);
     const pathSegments = relativePath.split('/');
-    let lastRef = accumulator;
+    let lastRef: Record<string, any> = accumulator;
     pathSegments.forEach((pathSegment) => {
       if (pathSegment.endsWith('.vue')) {
         lastRef[pathSegment] = { type: 'component', label: pathSegment, relativePath, exampleComponent };
@@ -145,8 +160,8 @@ const directoryStructure = computed(() => {
   }, {});
 });
 
-function filterNestedStructure(structure, filterText) {
-  return Object.entries(structure).reduce((accumulator, [key, value]) => {
+function filterNestedStructure(structure: DirectoryStructure, filterText: string): DirectoryStructure {
+  return Object.entries(structure).reduce((accumulator: DirectoryStructure, [key, value]) => {
     if (value.type === 'directory' && Object.keys(value.children).length > 0) {
       const filteredChildren = filterNestedStructure(value.children, filterText);
 
@@ -161,20 +176,23 @@ function filterNestedStructure(structure, filterText) {
   }, {});
 }
 
-const finalStructure = computed(() => {
+const finalStructure = computed<DirectoryStructure>(() => {
   return filterNestedStructure(directoryStructure.value, props.filterText);
 });
 
-function handleNavClick(arg) {
+function handleNavClick(arg: NavigationItem): void {
   if (props.onNavClick) {
     props.onNavClick(arg);
     return;
   }
 
-  router.push({
-    name: 'componentDoc',
-    params: { componentName: arg.exampleComponent },
-    query: { relativePath: arg.relativePath }
-  });
+  // Type guard to ensure we only use exampleComponent on ComponentItem
+  if (arg.type === 'component') {
+    router.push({
+      name: 'componentDoc',
+      params: { componentName: arg.exampleComponent },
+      query: { relativePath: arg.relativePath }
+    });
+  }
 }
 </script>

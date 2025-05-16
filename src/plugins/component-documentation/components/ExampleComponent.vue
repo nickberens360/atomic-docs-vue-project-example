@@ -94,7 +94,13 @@
   </div>
 </template>
 <script>
-import {generatePropsItems, getPropsHeaders, getEventHeaders, getSlotHeaders} from '@/plugins/component-documentation/utils/docGenerator.js';
+import {
+  generatePropsItems,
+  getPropsHeaders,
+  getEventHeaders,
+  getSlotHeaders
+} from '@/plugins/component-documentation/utils/docGenerator.js';
+
 export default {
   props: {
     component: {

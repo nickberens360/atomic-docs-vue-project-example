@@ -9,7 +9,7 @@
         <v-app-bar-nav-icon
           variant="text"
           class="ml-1"
-          @click="appStore.isAppRailOpen = !appStore.isAppRailOpen"
+          @click="toggleDrawer"
         />
         Welcome {{ userStore.user.name || 'User' }}
       </v-toolbar-title>
@@ -80,7 +80,12 @@ import ComponentNavigation from "./ComponentNavigation.vue";
 const router = useRouter();
 const filterText = ref('');
 
-function handleNavClick(arg) {
+interface NavigationItem {
+  exampleComponent: string;
+  relativePath: string;
+}
+
+function handleNavClick(arg: NavigationItem) {
   router.push({
     name: 'componentDoc',
     params: { componentName: arg.exampleComponent },
@@ -91,6 +96,12 @@ function handleNavClick(arg) {
 const userStore = useUserStore()
 const appStore = useAppStore()
 const theme = useTheme()
+
+// Function to toggle the drawer and rail
+function toggleDrawer() {
+  appStore.isAppRailOpen = !appStore.isAppRailOpen
+  appStore.isAppNavDrawerOpen = !appStore.isAppNavDrawerOpen
+}
 
 // Function to toggle the theme
 function toggleTheme(value: boolean) {
