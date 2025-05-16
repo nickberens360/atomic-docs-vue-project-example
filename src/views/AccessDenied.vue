@@ -22,26 +22,21 @@
     </div>
   </DefaultLayout>
 </template>
-<script>
-
+<script setup lang="ts">
+import { computed } from 'vue';
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 
-export default {
-  components: { DefaultLayout },
-  props: {
-    requiredPermissions: {
-      type: [Array, String],
-      default: () => []
-    },
-    requestedPath: {
-      type: String,
-      default: ''
-    }
-  },
-  computed: {
-    permissions() {
-      return Array.isArray(this.requiredPermissions) ? this.requiredPermissions : [this.requiredPermissions];
-    }
-  }
-};
+interface Props {
+  requiredPermissions?: string[] | string;
+  requestedPath?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  requiredPermissions: () => [],
+  requestedPath: ''
+});
+
+const permissions = computed<string[]>(() => {
+  return Array.isArray(props.requiredPermissions) ? props.requiredPermissions : [props.requiredPermissions];
+});
 </script>

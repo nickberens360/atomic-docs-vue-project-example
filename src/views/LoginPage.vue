@@ -68,22 +68,28 @@
   </VContainer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import {useAppStore} from "@/stores";
+import { useAppStore } from "@/stores"
+
+// Define types for form validation
+interface FormValidation {
+  valid: boolean;
+  validate: () => Promise<{ valid: boolean }>;
+}
 
 const router = useRouter()
 const userStore = useUserStore()
 const appStore = useAppStore()
 
-const loginForm = ref(null)
-const username = ref('')
-const password = ref('')
-const isFormValid = ref(false)
-const isLoggingIn = ref(false)
-const invalidCredentials = ref(false)
+const loginForm = ref<FormValidation | null>(null)
+const username = ref<string>('')
+const password = ref<string>('')
+const isFormValid = ref<boolean>(false)
+const isLoggingIn = ref<boolean>(false)
+const invalidCredentials = ref<boolean>(false)
 
 const login = async () => {
   const { valid } = await loginForm.value?.validate() || { valid: false }

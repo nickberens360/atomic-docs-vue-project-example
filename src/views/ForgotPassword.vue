@@ -105,57 +105,66 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { passwordResetRules, required } from '@/utils/validationMethods';
 // import user from '@/services/userAPIService';
 
-export default {
-  data(){
-    return {
-      isFormValid: false,
-      newPassword: '',
-      newPasswordConfirmation: '',
-      isSubmittingNewPassword: false,
-      confirmationMessage: '',
-      confirmationMessageColor: '',
-      rules: {
-        passwordResetRules,
-        confirmPasswordRules: [required, (v) => v === this.newPassword || 'Passwords Must Match']
-      },
-      showPassword: false,
-      showConfirmPassword: false,
-    };
-  },
-  computed:{
-    token() {
-      return this.$route.query.token;
-    },
-  },
-  methods: {
-    async submitPasswordReset(){
-      this.isSubmittingNewPassword = true;
-      this.setConfirmationMessage('');
-      try {
-        console.log('submitPasswordReset');
-        // const response = await user.resetPassword(this.newPassword, this.token);
-        // if(response.status === 200) {
-        //   this.setConfirmationMessage('Password Updated Successfully', 'success');
-        // }
-      } catch (error) {
-        const message = error.response.data;
-        if(message === 'ErrorRepeatPassword') {
-          this.setConfirmationMessage('Password submission failed, repeated password. Please select a new password');
-        } else {
-          this.setConfirmationMessage('Password submission failed. Please try again or contact an admin');
-        }
-      } finally {
-        this.isSubmittingNewPassword = false;
-      }
-    },
-    setConfirmationMessage(message, textColor = 'error'){
-      this.confirmationMessage = message;
-      this.confirmationMessageColor = textColor;
-    },
+// Define types
+type ValidationRule = (v: string) => boolean | string;
+
+// Setup reactive state
+const isFormValid = ref<boolean>(false);
+const newPassword = ref<string>('');
+const newPasswordConfirmation = ref<string>('');
+const isSubmittingNewPassword = ref<boolean>(false);
+const confirmationMessage = ref<string>('');
+const confirmationMessageColor = ref<string>('');
+const showPassword = ref<boolean>(false);
+const showConfirmPassword = ref<boolean>(false);
+
+// Setup route
+const route = useRoute();
+
+// Computed properties
+const token = computed<string | undefined>(() => {
+  return route.query.token as string | undefined;
+});
+
+// Setup validation rules
+const rules = {
+  passwordResetRules,
+  confirmPasswordRules: [
+    required,
+    (v: string) => v === newPassword.value || 'Passwords Must Match'
+  ] as ValidationRule[]
+};
+
+// Methods
+const setConfirmationMessage = (message: string, textColor: string = 'error'): void => {
+  confirmationMessage.value = message;
+  confirmationMessageColor.value = textColor;
+};
+
+const submitPasswordReset = async (): Promise<void> => {
+  isSubmittingNewPassword.value = true;
+  setConfirmationMessage('');
+  try {
+    console.log('submitPasswordReset');
+    // const response = await user.resetPassword(newPassword.value, token.value);
+    // if(response.status === 200) {
+    //   setConfirmationMessage('Password Updated Successfully', 'success');
+    // }
+  } catch (error: any) {
+    const message = error.response?.data;
+    if(message === 'ErrorRepeatPassword') {
+      setConfirmationMessage('Password submission failed, repeated password. Please select a new password');
+    } else {
+      setConfirmationMessage('Password submission failed. Please try again or contact an admin');
+    }
+  } finally {
+    isSubmittingNewPassword.value = false;
   }
 };
 </script>

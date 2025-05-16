@@ -71,49 +71,35 @@
   </div>
 </template>
 
-<script>
-import { ref, reactive, toRefs } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-export default {
-  setup() {
-    const router = useRouter();
+const router = useRouter();
 
-    const username = ref('');
-    const isFormValid = ref(false);
-    const isRequestingPasswordReset = ref(false);
-    const statusMessage = ref('');
-    const statusMessageColor = ref('');
-    const hideSubmitButton = ref(false);
+const username = ref<string>('');
+const isFormValid = ref<boolean>(false);
+const isRequestingPasswordReset = ref<boolean>(false);
+const statusMessage = ref<string>('');
+const statusMessageColor = ref<string>('');
+const hideSubmitButton = ref<boolean>(false);
 
-    const submitPasswordResetRequest = async () => {
-      isRequestingPasswordReset.value = true;
-      statusMessage.value = '';
-      try {
-        console.log('Requesting password reset for');
-        router.push({ name: 'dashboard' });
-        // Simulate API call
-        // await user.requestPasswordReset(username.value);
-        // statusMessage.value = 'Please check your email for next steps to reset your password.';
-        // statusMessageColor.value = 'success';
-        // hideSubmitButton.value = true;
-      } catch (error) {
-        statusMessage.value = 'Reset request failed. Please try again or contact an admin';
-        statusMessageColor.value = 'error';
-      } finally {
-        isRequestingPasswordReset.value = false;
-      }
-    };
-
-    return {
-      username,
-      isFormValid,
-      isRequestingPasswordReset,
-      statusMessage,
-      statusMessageColor,
-      hideSubmitButton,
-      submitPasswordResetRequest,
-    };
-  },
+const submitPasswordResetRequest = async (): Promise<void> => {
+  isRequestingPasswordReset.value = true;
+  statusMessage.value = '';
+  try {
+    console.log('Requesting password reset for', username.value);
+    router.push({ name: 'dashboard' });
+    // Simulate API call
+    // await user.requestPasswordReset(username.value);
+    // statusMessage.value = 'Please check your email for next steps to reset your password.';
+    // statusMessageColor.value = 'success';
+    // hideSubmitButton.value = true;
+  } catch (error) {
+    statusMessage.value = 'Reset request failed. Please try again or contact an admin';
+    statusMessageColor.value = 'error';
+  } finally {
+    isRequestingPasswordReset.value = false;
+  }
 };
 </script>
