@@ -7,27 +7,28 @@
       <!-- If item is a component -->
       <v-list-item
         v-if="item.type === 'component'"
-        prepend-icon="mdi-file-document"
         link
         color="primary"
         @click="handleNavClick(item)"
       >
+        <template #prepend>
+          <FileIcon :size="20" />
+        </template>
         <v-list-item-title>{{ item.label }}</v-list-item-title>
       </v-list-item>
 
       <!-- If item is a directory -->
       <v-list-item
         v-else-if="item.type === 'directory'"
-        prepend-icon="mdi-folder"
         link
         color="primary"
       >
+        <template #prepend>
+          <FolderIcon :size="20" />
+        </template>
         <v-list-item-title>{{ item.label }}</v-list-item-title>
         <template #append>
-          <v-icon
-            icon="mdi-menu-right"
-            size="x-small"
-          />
+          <ArrowRightIcon :size="16" />
         </template>
 
         <!-- Recursive Menu for Directories -->
@@ -57,10 +58,7 @@
               >
                 <v-list-item-title>{{ child.label }}</v-list-item-title>
                 <template #append>
-                  <v-icon
-                    icon="mdi-menu-right"
-                    size="x-small"
-                  />
+                  <ArrowRightIcon :size="16" />
                 </template>
 
                 <!-- Further Recursive Submenu -->
@@ -103,6 +101,9 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
+import FileIcon from '@/components/icons/FileIcon.vue';
+import FolderIcon from '@/components/icons/FolderIcon.vue';
+import ArrowRightIcon from '@/components/icons/ArrowRightIcon.vue';
 
 interface ComponentDocPlugin {
   convertPathToExampleName: (path: string) => string;
