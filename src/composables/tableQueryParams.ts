@@ -1,7 +1,36 @@
 import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-export function useTableQueryParams(options = {}) {
+// Define interfaces for the function parameters and return values
+interface TableQueryParamsOptions {
+  initialFilters?: Record<string, any>;
+  initialSortBy?: Array<{ key: string; order: string }>;
+  initialPagination?: {
+    page?: number | string;
+    itemsPerPage?: number | string;
+  };
+  initialTab?: string | null;
+}
+
+interface SortByItem {
+  key: string;
+  order: string;
+}
+
+interface PaginationState {
+  page?: number | string;
+  itemsPerPage?: number | string;
+}
+
+interface TableQueryParamsReturn {
+  filters: ReturnType<typeof ref<Record<string, any>>>;
+  sortBy: ReturnType<typeof ref<SortByItem[]>>;
+  pagination: ReturnType<typeof ref<PaginationState>>;
+  activeTab: ReturnType<typeof ref<string | null>>;
+  updateQuery: () => void;
+}
+
+export function useTableQueryParams(options: TableQueryParamsOptions = {}): TableQueryParamsReturn {
   const {
     initialFilters = {},
     initialSortBy = [],
@@ -10,10 +39,10 @@ export function useTableQueryParams(options = {}) {
   } = options;
   const route = useRoute();
   const router = useRouter();
-  const filters = ref({ ...initialFilters });
-  const sortBy = ref(initialSortBy);
-  const pagination = ref({ ...initialPagination });
-  const activeTab = ref(initialTab);
+  const filters = ref<Record<string, any>>({ ...initialFilters });
+  const sortBy = ref<SortByItem[]>(initialSortBy);
+  const pagination = ref<PaginationState>({ ...initialPagination });
+  const activeTab = ref<string | null>(initialTab);
 
   watch([filters, sortBy, pagination, activeTab], updateQuery, { deep: true });
 
@@ -34,7 +63,7 @@ export function useTableQueryParams(options = {}) {
     updateQuery
   };
 
-  function updateStateFromQuery() {
+  function updateStateFromQuery(): void {
     const query = route.query;
 
     Object.keys(initialFilters).forEach(key => {
@@ -53,7 +82,7 @@ export function useTableQueryParams(options = {}) {
     });
 
     if (query.sortBy && query.sortOrder) {
-      sortBy.value = [{ key: query.sortBy, order: query.sortOrder }];
+      sortBy.value = [{ key: query.sortBy as string, order: query.sortOrder as string }];
     }
 
     if (query.page) {
@@ -63,13 +92,13 @@ export function useTableQueryParams(options = {}) {
       pagination.value.itemsPerPage = query.itemsPerPage;
     }
     if (query.tab) {
-      activeTab.value = query.tab;
+      activeTab.value = query.tab as string;
     }
   }
 
-  function updateQuery() {
+  function updateQuery(): void {
     const currentQuery = { ...route.query };
-    const newQuery = { ...currentQuery };
+    const newQuery: Record<string, any> = { ...currentQuery };
 
     Object.entries(filters.value).forEach(([key, value]) => {
       const queryKey = `filters[${key}]`;
