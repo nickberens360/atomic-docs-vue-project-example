@@ -2,14 +2,15 @@
   <VListGroup
     v-if="navItems.type === 'directory'"
     :value="navItems.label"
-    collapse-icon="$solidChevronUp"
-    expand-icon="$chevronDown"
+    collapse-icon="mdi-chevron-up"
+    expand-icon="mdi-chevron-down"
     bg-color="transparent"
   >
     <template #activator="{ props }">
       <VListItem
         v-bind="props"
         :title="navItems.label"
+        prepend-icon="mdi-folder"
         bg-color="transparent"
       />
     </template>
@@ -27,6 +28,7 @@
         v-else
         :title="child.label"
         :value="child.label"
+        prepend-icon="mdi-file-document"
         bg-color="transparent"
         @click="emit('nav-click', child)"
       />
@@ -36,6 +38,7 @@
     v-else
     :title="navItems.label"
     :value="navItems.label"
+    prepend-icon="mdi-file-document"
     @click="emit('nav-click', navItems)"
   />
 </template>

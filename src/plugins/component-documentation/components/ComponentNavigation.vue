@@ -4,98 +4,10 @@
       v-for="(item, key) in finalStructure"
       :key="key"
     >
-      <!-- If item is a component -->
-      <v-list-item
-        v-if="item.type === 'component'"
-        prepend-icon="mdi-file-document"
-        link
-        color="primary"
-        @click="handleNavClick(item)"
-      >
-        <v-list-item-title>{{ item.label }}</v-list-item-title>
-      </v-list-item>
-
-      <!-- If item is a directory -->
-      <v-list-item
-        v-else-if="item.type === 'directory'"
-        prepend-icon="mdi-folder"
-        link
-        color="primary"
-      >
-        <v-list-item-title>{{ item.label }}</v-list-item-title>
-        <template #append>
-          <v-icon
-            icon="mdi-menu-right"
-            size="x-small"
-          />
-        </template>
-
-        <!-- Recursive Menu for Directories -->
-        <v-menu
-          activator="parent"
-          open-on-hover
-          submenu
-        >
-          <v-list>
-            <template
-              v-for="(child, childKey) in item.children"
-              :key="childKey"
-            >
-              <!-- If child is a component -->
-              <v-list-item
-                v-if="child.type === 'component'"
-                link
-                @click="handleNavClick(child)"
-              >
-                <v-list-item-title>{{ child.label }}</v-list-item-title>
-              </v-list-item>
-
-              <!-- If child is a directory -->
-              <v-list-item
-                v-else-if="child.type === 'directory'"
-                link
-              >
-                <v-list-item-title>{{ child.label }}</v-list-item-title>
-                <template #append>
-                  <v-icon
-                    icon="mdi-menu-right"
-                    size="x-small"
-                  />
-                </template>
-
-                <!-- Further Recursive Submenu -->
-                <v-menu
-                  activator="parent"
-                  open-on-hover
-                  submenu
-                >
-                  <v-list>
-                    <!-- Repeat same structure for deeper levels -->
-                    <template
-                      v-for="(grandChild, grandChildKey) in child.children"
-                      :key="grandChildKey"
-                    >
-                      <v-list-item
-                        v-if="grandChild.type === 'component'"
-                        link
-                        @click="handleNavClick(grandChild)"
-                      >
-                        <v-list-item-title>{{ grandChild.label }}</v-list-item-title>
-                      </v-list-item>
-                      <v-list-item
-                        v-else-if="grandChild.type === 'directory'"
-                        link
-                      >
-                        <v-list-item-title>{{ grandChild.label }}</v-list-item-title>
-                      </v-list-item>
-                    </template>
-                  </v-list>
-                </v-menu>
-              </v-list-item>
-            </template>
-          </v-list>
-        </v-menu>
-      </v-list-item>
+      <RecursiveNavItem
+        :nav-items="item"
+        @nav-click="handleNavClick"
+      />
     </template>
   </v-list>
 </template>
@@ -103,6 +15,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
+import RecursiveNavItem from './RecursiveNavItem.vue';
 
 interface ComponentItem {
   type: 'component';
@@ -182,9 +95,12 @@ const finalStructure = computed<Record<string, NavigationItem>>(() => {
   return filterNestedStructure(directoryStructure.value, props.filterText);
 });
 
-function handleNavClick(arg: ComponentItem): void {
+function handleNavClick(arg: NavigationItem): void {
+  // Only process component items for navigation
+  if (arg.type !== 'component') return;
+
   if (props.onNavClick) {
-    props.onNavClick(arg);
+    props.onNavClick(arg as ComponentItem);
     return;
   }
 
