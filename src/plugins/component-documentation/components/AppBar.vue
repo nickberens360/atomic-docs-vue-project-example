@@ -33,7 +33,7 @@
           <template #append-inner>
             <VIcon
               v-if="filterText"
-              icon="fal fa-times"
+              icon="mdi-close"
               size="18"
               @click="filterText = ''"
             />
