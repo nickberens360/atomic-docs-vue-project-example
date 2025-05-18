@@ -76,12 +76,19 @@ import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
 import {useRouter} from "vue-router";
 import ComponentNavigation from "./ComponentNavigation.vue";
-import { ComponentNavItem } from '@/plugins/component-documentation/utils/types';
+
+// Import the ComponentItem interface from the types used in ComponentNavigation
+interface ComponentItem {
+  type: 'component';
+  label: string;
+  relativePath: string;
+  exampleComponent: string;
+}
 
 const router = useRouter();
 const filterText = ref('');
 
-function handleNavClick(arg: ComponentNavItem): void {
+function handleNavClick(arg: ComponentItem): void {
   router.push({
     name: 'componentDoc',
     params: { componentName: arg.exampleComponent },

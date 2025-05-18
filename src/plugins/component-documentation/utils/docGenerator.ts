@@ -1,16 +1,32 @@
-import {
-  PropType,
-  Prop,
-  Props,
-  Component,
-  PropItem,
-  Header,
-  EventDefinition,
-  EventItem,
-  SlotDefinition,
-  SlotItem,
-  ComponentDocumentationOptions
-} from '@/plugins/component-documentation/utils/types';
+interface PropType {
+  name: string;
+}
+
+interface Prop {
+  type: PropType | PropType[];
+  required?: boolean;
+  default?: any;
+}
+
+interface Props {
+  [key: string]: Prop;
+}
+
+interface Component {
+  props?: Props;
+}
+
+interface PropItem {
+  name: string;
+  type: string;
+  required: string;
+  default: string;
+}
+
+interface Header {
+  title: string;
+  key: string;
+}
 
 export function getPropType(prop: Prop): string {
   if (Array.isArray(prop.type)) {
@@ -66,7 +82,7 @@ export function getEventHeaders(additionalHeaders: Header[] = []): Header[] {
 }
 
 //TODO: No longer working
-// export function generateEventItems(definitions: EventDefinition[]): EventItem[] {
+// export function generateEventItems(definitions) {
 //   return definitions.map(({ name, payload = 'None', description = 'No description provided' }) => ({
 //     event: name,
 //     payload,
@@ -83,21 +99,26 @@ export function getSlotHeaders(additionalHeaders: Header[] = []): Header[] {
   ];
 }
 //TODO: No longer working
-// export function generateSlotItems(definitions: SlotDefinition[]): SlotItem[] {
+// export function generateSlotItems(definitions) {
 //   return definitions.map(({ name, defaultContent = 'None', description = 'No description provided' }) => ({
 //     name,
-//     content: defaultContent,
+//     defaultContent,
 //     description,
 //   }));
 // }
 
-// Using the ComponentDocumentationOptions interface from types.ts
+interface ComponentDocumentationOptions {
+  component?: Component;
+  propsAdditionalHeaders?: Header[];
+  eventsAdditionalHeaders?: Header[];
+  slotsAdditionalHeaders?: Header[];
+}
 
 export function generateComponentDocumentation(options: ComponentDocumentationOptions = {}) {
   const {
     component,
-    slotDefinitions = [],
-    eventDefinitions = [],
+    // slotDefinitions = [],
+    // eventDefinitions = [],
     propsAdditionalHeaders = [],
     eventsAdditionalHeaders = [],
     slotsAdditionalHeaders = []
@@ -109,11 +130,11 @@ export function generateComponentDocumentation(options: ComponentDocumentationOp
     },
     events: {
       headers: getEventHeaders(eventsAdditionalHeaders),
-      items: [] // TODO: Uncomment when generateEventItems is fixed: generateEventItems(eventDefinitions)
+      // items: generateEventItems(eventDefinitions)
     },
     slots: {
       headers: getSlotHeaders(slotsAdditionalHeaders),
-      items: [] // TODO: Uncomment when generateSlotItems is fixed: generateSlotItems(slotDefinitions)
+      // items: generateSlotItems(slotDefinitions)
     }
   };
 }

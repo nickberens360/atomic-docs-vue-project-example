@@ -27,12 +27,20 @@
 import { computed, inject } from 'vue';
 import ComponentNotDocumented from '../components/ComponentNotDocumented.vue';
 
-import { Component as ComponentType, ComponentDocPlugin, VueComponent } from '@/plugins/component-documentation/utils/types';
+// Define a custom type for component definitions
+type ComponentType = any;
 
-// Define a type for Vue component constructors
-// Using more specific types for constructor arguments
-type ComponentConstructorArgs = Record<string, unknown>;
-type ComponentConstructor = new (props: ComponentConstructorArgs, context?: unknown) => ComponentType;
+// Define the interface for the component documentation plugin
+interface ComponentDocPlugin {
+  convertPathToExampleName: (path: string) => string;
+  componentModules: Record<string, () => Promise<any>>;
+  exampleModules: Record<string, () => Promise<any>>;
+}
+
+// Define the interface for the example components
+interface ExampleComponent {
+  default: ComponentType;
+}
 
 // Define the interface for the props
 interface Props {
@@ -41,7 +49,7 @@ interface Props {
 }
 
 const componentDocPlugin = inject('componentDocPlugin') as ComponentDocPlugin;
-const exampleComponents: Record<string, VueComponent> = {};
+const exampleComponents: Record<string, ExampleComponent> = {};
 const importComponentPromises = Object.entries(componentDocPlugin.exampleModules)
   .map(async ([path, moduleImport]) => {
     const relativePath = path.split('component-examples/').slice(1).join('');
@@ -49,7 +57,7 @@ const importComponentPromises = Object.entries(componentDocPlugin.exampleModules
     if (exampleComponents[componentName]) {
       throw new Error(`Component already registered with name: ${componentName}`);
     } else {
-      exampleComponents[componentName] = await moduleImport() as VueComponent;
+      exampleComponents[componentName] = await moduleImport();
     }
     return exampleComponents[componentName];
   });
@@ -59,60 +67,12 @@ const props = defineProps<Props>();
 
 const componentName = computed<string>(() => props.relativePath.split('/').pop()?.replace('.vue', '') || '');
 
-// Type guard to check if a component is a valid ComponentConstructor
-function isComponentConstructor(component: unknown): component is ComponentConstructor {
-  return typeof component === 'function';
-}
-
-// Type guard to check if a component is a valid Vue component object
-function isVueComponentObject(component: unknown): boolean {
-  return typeof component === 'object' && component !== null &&
-    // Check for render function (Vue 3 object components)
-    ('render' in component ||
-     // Check for setup function (Vue 3 script setup components)
-     'setup' in component ||
-     // Check for template (Vue SFC with template)
-     'template' in component);
-}
-
-// Debug function to log component structure
-function debugComponent(component: unknown, name: string): void {
-  console.log(`Component ${name} structure:`, {
-    type: typeof component,
-    isNull: component === null,
-    keys: component && typeof component === 'object' ? Object.keys(component) : [],
-    hasRender: component && typeof component === 'object' && 'render' in component,
-    hasSetup: component && typeof component === 'object' && 'setup' in component,
-    hasTemplate: component && typeof component === 'object' && 'template' in component
-  });
-}
-
-const currentComponent = computed<ComponentConstructor | typeof ComponentNotDocumented>(() => {
+const currentComponent = computed<ComponentType>(() => {
   if (exampleComponents[props.componentName]) {
-    const component = exampleComponents[props.componentName].default;
-
-    // Debug the component structure to help diagnose issues
-    debugComponent(component, props.componentName);
-
-    // Use the type guard to safely cast the component
-    if (isComponentConstructor(component)) {
-      console.log(`Component ${props.componentName} is a valid constructor function`);
-      return component;
-    }
-
-    // Check if it's a Vue component object
-    if (isVueComponentObject(component)) {
-      console.log(`Component ${props.componentName} is a valid Vue component object`);
-      // For Vue component objects, we can return them directly as they're compatible with the Component interface
-      return component as unknown as ComponentConstructor;
-    }
-
-    // If the component doesn't match our expected types, log a warning and return the fallback
-    console.warn(`Component ${props.componentName} is not a valid component constructor or object`);
+    return exampleComponents[props.componentName].default;
   } else {
-    console.warn(`No example component found with name: ${props.componentName}`);
+    return ComponentNotDocumented;
   }
-  return ComponentNotDocumented;
 });
 </script>
 
