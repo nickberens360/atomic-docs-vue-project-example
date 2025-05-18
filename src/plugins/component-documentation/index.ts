@@ -19,8 +19,8 @@ export default {
 };
 
 function convertPathToExampleName(path: string): string {
-  return 'Example' + path.replaceAll(' ', '-')
-    .replaceAll('.vue', '')
+  return 'Example' + path.replace(/ /g, '-')
+    .replace(/\.vue/g, '')
     .split('/')
     .map((part) => {
       return part.split('-')
