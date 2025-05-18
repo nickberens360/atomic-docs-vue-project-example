@@ -16,26 +16,11 @@
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import RecursiveNavItem from './RecursiveNavItem.vue';
-
-interface ComponentItem {
-  type: 'component';
-  label: string;
-  relativePath: string;
-  exampleComponent: string;
-}
-
-interface DirectoryItem {
-  type: 'directory';
-  label: string;
-  relativePath: string;
-  children: Record<string, ComponentItem | DirectoryItem>;
-}
-
-type NavigationItem = ComponentItem | DirectoryItem;
+import { ComponentDocPlugin, ComponentNavItem, NavItem } from '@/plugins/component-documentation/utils/types';
 
 interface Props {
   filterText?: string;
-  onNavClick?: ((arg: ComponentItem) => void) | null;
+  onNavClick?: ((arg: ComponentNavItem) => void) | null;
   bgColor?: string;
 }
 
@@ -45,15 +30,11 @@ const props = withDefaults(defineProps<Props>(), {
   bgColor: 'background'
 });
 
-interface ComponentDocPlugin {
-  convertPathToExampleName: (path: string) => string;
-}
-
 const componentDocPlugin = inject('componentDocPlugin') as ComponentDocPlugin;
 const router = useRouter();
 
-const directoryStructure = computed<Record<string, NavigationItem>>(() => {
-  return Object.keys(import.meta.glob('@/components/**/*.vue')).reduce<Record<string, NavigationItem>>((accumulator, filePath) => {
+const directoryStructure = computed<Record<string, NavItem>>(() => {
+  return Object.keys(import.meta.glob('@/components/**/*.vue')).reduce<Record<string, NavItem>>((accumulator, filePath) => {
     const relativePath = filePath.split('components/').slice(1).join('');
     const exampleComponent = componentDocPlugin.convertPathToExampleName(relativePath);
     const pathSegments = relativePath.split('/');
@@ -73,10 +54,10 @@ const directoryStructure = computed<Record<string, NavigationItem>>(() => {
 });
 
 function filterNestedStructure(
-  structure: Record<string, NavigationItem>,
+  structure: Record<string, NavItem>,
   filterText: string
-): Record<string, NavigationItem> {
-  return Object.entries(structure).reduce<Record<string, NavigationItem>>((accumulator, [key, value]) => {
+): Record<string, NavItem> {
+  return Object.entries(structure).reduce<Record<string, NavItem>>((accumulator, [key, value]) => {
     if (value.type === 'directory' && Object.keys(value.children).length > 0) {
       const filteredChildren = filterNestedStructure(value.children, filterText);
 
@@ -91,16 +72,16 @@ function filterNestedStructure(
   }, {});
 }
 
-const finalStructure = computed<Record<string, NavigationItem>>(() => {
+const finalStructure = computed<Record<string, NavItem>>(() => {
   return filterNestedStructure(directoryStructure.value, props.filterText);
 });
 
-function handleNavClick(arg: NavigationItem): void {
+function handleNavClick(arg: NavItem): void {
   // Only process component items for navigation
   if (arg.type !== 'component') return;
 
   if (props.onNavClick) {
-    props.onNavClick(arg as ComponentItem);
+    props.onNavClick(arg);
     return;
   }
 

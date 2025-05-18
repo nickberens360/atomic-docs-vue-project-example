@@ -44,23 +44,7 @@
 </template>
 <script setup lang="ts">
 import { computed } from 'vue';
-
-// Define interfaces for the component's props
-interface ComponentNavItem {
-  type: 'component';
-  label: string;
-  relativePath?: string;
-  exampleComponent?: string;
-}
-
-interface DirectoryNavItem {
-  type: 'directory';
-  label: string;
-  relativePath?: string;
-  children: Record<string, NavItem>;
-}
-
-type NavItem = ComponentNavItem | DirectoryNavItem;
+import { NavItem } from '@/plugins/component-documentation/utils/types';
 
 // Define props
 interface Props {
@@ -77,7 +61,13 @@ const emit = defineEmits<{
 // Computed properties
 const sortedChildren = computed<NavItem[]>(() => {
   if (props.navItems.type !== 'directory') return [];
-  return Object.values(props.navItems.children || {}).sort((a) => a.type === 'directory' ? -1 : 1);
+  return Object.values(props.navItems.children || {}).sort((a, b) => {
+    // Sort directories first, then by label
+    if (a.type === 'directory' && b.type !== 'directory') return -1;
+    if (a.type !== 'directory' && b.type === 'directory') return 1;
+    // If both are the same type, sort by label
+    return a.label.localeCompare(b.label);
+  });
 });
 </script>
 <style lang="scss" scoped>

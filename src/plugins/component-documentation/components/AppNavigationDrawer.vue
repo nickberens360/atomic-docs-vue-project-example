@@ -28,15 +28,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useUserStore } from "@/stores/user";
 import { useAppStore } from "@/stores/app";
 import ComponentNavigation from "./ComponentNavigation.vue";
 
-const userStore = useUserStore();
 const appStore = useAppStore();
-const drawer = ref(true);
-const rail = ref(true);
 </script>
 
 <style scoped lang="scss">

@@ -1,5 +1,6 @@
 import { App } from 'vue';
 import ExampleComponent from './components/ExampleComponent.vue';
+import { ComponentDocPlugin } from '@/plugins/component-documentation/utils/types';
 
 export default {
   install(app: App) {
@@ -8,11 +9,13 @@ export default {
     const enableDocs = import.meta.env.VITE_ENABLE_COMPONENT_DOCS === 'true';
 
     if (enableDocs) {
-      app.provide('componentDocPlugin', {
+      const pluginData: ComponentDocPlugin = {
         convertPathToExampleName,
         componentModules,
         exampleModules
-      });
+      };
+
+      app.provide('componentDocPlugin', pluginData);
       app.component('ExampleComponentUsage', ExampleComponent);
     }
   }

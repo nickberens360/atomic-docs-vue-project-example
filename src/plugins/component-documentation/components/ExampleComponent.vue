@@ -102,28 +102,20 @@ import {
   getSlotHeaders
 } from '@/plugins/component-documentation/utils/docGenerator.ts';
 
-// Define interfaces for the component's props
-interface Component {
-  props?: Record<string, any>;
-}
+import {
+  Component,
+  PropItem,
+  Header,
+  EventItem,
+  SlotItem
+} from '@/plugins/component-documentation/utils/types';
 
-interface PropItem {
-  name: string;
-  type: string;
-  required: string;
-  default: string;
-}
-
-interface Header {
-  title: string;
-  key: string;
-}
-
+// Define interface for the component's props
 interface Props {
   component?: Component;
   description?: string;
-  eventItems?: any[];
-  slotItems?: any[];
+  eventItems?: EventItem[];
+  slotItems?: SlotItem[];
   propItems?: PropItem[];
 }
 
