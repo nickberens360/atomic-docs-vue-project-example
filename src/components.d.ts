@@ -8,20 +8,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppBar: typeof import('./components/App/AppBar.vue')['default']
-    AppFooter: typeof import('./components/AppFooter.vue')['default']
-    AppNavigation: typeof import('./components/AppNavigation.vue')['default']
-    ArrowRightIcon: typeof import('./components/icons/ArrowRightIcon.vue')['default']
     BoxDemo: typeof import('./components/BoxDemo.vue')['default']
     ConfirmDialog: typeof import('./components/ConfirmDialog.vue')['default']
-    FileIcon: typeof import('./components/icons/FileIcon.vue')['default']
-    FolderIcon: typeof import('./components/icons/FolderIcon.vue')['default']
-    HelloWorld: typeof import('./components/HelloWorld.vue')['default']
-    LoginPage: typeof import('./components/LoginPage.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SomeComponent: typeof import('./components/atoms/SomeComponent.vue')['default']
-    Test: typeof import('./components/atoms/test.vue')['default']
-    TestingThing: typeof import('./components/testing/TestingThing.vue')['default']
-    ThisTest: typeof import('./components/atoms/ThisTest.vue')['default']
   }
 }
