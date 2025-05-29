@@ -93,7 +93,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { computed } from 'vue';
 import {
   generatePropsItems,
@@ -102,52 +102,32 @@ import {
   getSlotHeaders
 } from '@/plugins/component-documentation/utils/docGenerator.ts';
 
-// Define interfaces for the component's props
-interface Component {
-  props?: Record<string, any>;
-}
-
-interface PropItem {
-  name: string;
-  type: string;
-  required: string;
-  default: string;
-}
-
-interface Header {
-  title: string;
-  key: string;
-  sortable?: boolean;
-  align?: 'start' | 'end' | 'center';
-}
-
-// Define DataTableItem interface locally instead of importing from Vuetify
-interface DataTableItem {
-  [key: string]: any;
-}
-
-// Define more specific types to avoid conflicts with Vuetify's internal types
-type TableHeader = Header;
-type TableItem = DataTableItem;
-
-interface Props {
-  component?: Component;
-  description?: string;
-  eventItems?: TableItem[];
-  slotItems?: TableItem[];
-  propItems?: PropItem[];
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  component: undefined,
-  description: '',
-  eventItems: () => [] as TableItem[],
-  slotItems: () => [] as TableItem[],
-  propItems: () => [],
+// Define props directly without TypeScript
+const props = defineProps({
+  component: {
+    type: Object,
+    default: undefined
+  },
+  description: {
+    type: String,
+    default: ''
+  },
+  eventItems: {
+    type: Array,
+    default: () => []
+  },
+  slotItems: {
+    type: Array,
+    default: () => []
+  },
+  propItems: {
+    type: Array,
+    default: () => []
+  }
 });
 
 // Computed properties
-const computedPropItems = computed<PropItem[]>(() => {
+const computedPropItems = computed(() => {
   // Use the propItems prop if it's provided and not empty
   if (props.propItems && props.propItems.length > 0) {
     return props.propItems;
@@ -159,15 +139,15 @@ const computedPropItems = computed<PropItem[]>(() => {
   return [];
 });
 
-const propHeaders = computed<TableHeader[]>(() => {
+const propHeaders = computed(() => {
   return getPropsHeaders();
 });
 
-const eventHeaders = computed<TableHeader[]>(() => {
+const eventHeaders = computed(() => {
   return getEventHeaders();
 });
 
-const slotHeaders = computed<TableHeader[]>(() => {
+const slotHeaders = computed(() => {
   return getSlotHeaders();
 });
 </script>
