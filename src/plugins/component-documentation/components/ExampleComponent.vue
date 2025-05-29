@@ -67,7 +67,6 @@
       </VDataTable>
     </slot>
 
-
     <h2 class="my-4">
       Slots
     </h2>
@@ -93,6 +92,7 @@
     </slot>
   </div>
 </template>
+
 <script setup lang="ts">
 import { computed } from 'vue';
 import {
@@ -101,8 +101,6 @@ import {
   getEventHeaders,
   getSlotHeaders
 } from '@/plugins/component-documentation/utils/docGenerator.ts';
-// Import DataTableItem type from Vuetify
-import type { DataTableItem } from 'vuetify/lib/components';
 
 // Define interfaces for the component's props
 interface Component {
@@ -119,21 +117,32 @@ interface PropItem {
 interface Header {
   title: string;
   key: string;
+  sortable?: boolean;
+  align?: 'start' | 'end' | 'center';
 }
+
+// Define DataTableItem interface locally instead of importing from Vuetify
+interface DataTableItem {
+  [key: string]: any;
+}
+
+// Define more specific types to avoid conflicts with Vuetify's internal types
+type TableHeader = Header;
+type TableItem = DataTableItem;
 
 interface Props {
   component?: Component;
   description?: string;
-  eventItems?: DataTableItem[];
-  slotItems?: DataTableItem[];
+  eventItems?: TableItem[];
+  slotItems?: TableItem[];
   propItems?: PropItem[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   component: undefined,
   description: '',
-  eventItems: () => [],
-  slotItems: () => [],
+  eventItems: () => [] as TableItem[],
+  slotItems: () => [] as TableItem[],
   propItems: () => [],
 });
 
@@ -150,15 +159,15 @@ const computedPropItems = computed<PropItem[]>(() => {
   return [];
 });
 
-const propHeaders = computed<Header[]>(() => {
+const propHeaders = computed<TableHeader[]>(() => {
   return getPropsHeaders();
 });
 
-const eventHeaders = computed<Header[]>(() => {
+const eventHeaders = computed<TableHeader[]>(() => {
   return getEventHeaders();
 });
 
-const slotHeaders = computed<Header[]>(() => {
+const slotHeaders = computed<TableHeader[]>(() => {
   return getSlotHeaders();
 });
 </script>
