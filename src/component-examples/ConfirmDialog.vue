@@ -17,7 +17,28 @@
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { ref } from 'vue';
 
-const dialogRef = ref(null);
+// Define an interface for the exposed methods of ConfirmDialog
+interface DialogOptions {
+  color?: string;
+  textColor?: string;
+  width?: number;
+  zIndex?: number;
+  confirmBtnText?: string;
+  cancelBtnText?: string;
+  titleIcon?: string;
+  supportingMessage?: string;
+}
+
+interface ConfirmDialogInstance {
+  open: (
+    dialogTitle: string, 
+    dialogMessage: string, 
+    dialogOptions?: Partial<DialogOptions>
+  ) => Promise<boolean>;
+}
+
+// Type the ref with the interface
+const dialogRef = ref<ConfirmDialogInstance | null>(null);
 
 const showDialog = async () => {
   if (dialogRef.value) {

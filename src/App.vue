@@ -3,7 +3,7 @@
     <VSnackbar
       v-model="appStore.snackbar.isShown"
       :timeout="appStore.snackbar.timeout"
-      :location="appStore.snackbar.location"
+      :location="appStore.snackbar.location as any"
       transition="slide-x-reverse-transition"
       color="surface"
     >

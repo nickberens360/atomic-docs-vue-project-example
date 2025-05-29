@@ -114,6 +114,6 @@ const cancel = () => {
 };
 
 defineExpose({
-  open
+  open: open as any
 });
 </script>

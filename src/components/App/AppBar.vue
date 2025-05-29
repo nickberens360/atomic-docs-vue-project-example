@@ -49,10 +49,13 @@ const appStore = useAppStore()
 const theme = useTheme()
 
 // Function to toggle the theme
-function toggleTheme(value: boolean) {
+function toggleTheme(value: boolean | null) {
+  // Handle null value by defaulting to the current value or false
+  const isDark = value !== null ? value : false;
+
   // Sync isDark state in the Pinia store and Vuetify theme
-  appStore.theme.isDark = value
-  theme.global.name.value = value ? 'darkBlueGreyTheme' : 'blueGreyTheme'
+  appStore.theme.isDark = isDark;
+  theme.global.name.value = isDark ? 'darkBlueGreyTheme' : 'blueGreyTheme';
 }
 
 // Watch for Vuetify theme changes to keep the store synchronized

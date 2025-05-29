@@ -101,6 +101,8 @@ import {
   getEventHeaders,
   getSlotHeaders
 } from '@/plugins/component-documentation/utils/docGenerator.ts';
+// Import DataTableItem type from Vuetify
+import type { DataTableItem } from 'vuetify/lib/components';
 
 // Define interfaces for the component's props
 interface Component {
@@ -122,8 +124,8 @@ interface Header {
 interface Props {
   component?: Component;
   description?: string;
-  eventItems?: any[];
-  slotItems?: any[];
+  eventItems?: DataTableItem[];
+  slotItems?: DataTableItem[];
   propItems?: PropItem[];
 }
 
