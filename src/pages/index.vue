@@ -27,7 +27,7 @@
         <VBtn
           variant="outlined"
           size="large"
-          :to="{ name: 'componentDocs' }"
+          :to="{ name: 'componentDocs' as any }"
           target="_blank"
         >
           COMPONENT DOCS
@@ -45,7 +45,7 @@
           variant="flat"
           color="primary"
           size="large"
-          :to="{ name: 'customerIndex' }"
+          :to="{ name: 'customerIndex' as any }"
         >
           Dashboard
         </VBtn>
