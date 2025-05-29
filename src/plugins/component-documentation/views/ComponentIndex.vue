@@ -5,7 +5,7 @@
     <v-container fluid>
       <VRow
         class="h-100"
-        :justify="$route.name === 'componentDocs' ? 'center' : 'end'"
+        :justify="isComponentDocsRoute ? 'center' : 'end'"
       >
         <VCol
           cols="12"
@@ -14,7 +14,7 @@
           class="px-6"
         >
           <div>
-            <div v-if="$route.name === 'componentDocs'">
+            <div v-if="isComponentDocsRoute">
               <p
                 class="text-uppercase font-weight-bold text-center"
                 style="line-height: .80; letter-spacing: -4px;"
@@ -31,7 +31,7 @@
               />
             </div>
             <VTextField
-              v-if="$route.name === 'componentDocs'"
+              v-if="isComponentDocsRoute"
               v-model="filterText"
               name="filter-list"
               placeholder="Search Components"
@@ -50,7 +50,7 @@
               </template>
             </VTextField>
             <v-menu
-              :model-value="$route.name === 'componentDocs'"
+              :model-value="isComponentDocsRoute"
               activator="parent"
               open-on-hover
               open-on-focus
@@ -79,8 +79,8 @@
 
 <script setup lang="ts">
 
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import AppBar from '../components/AppBar.vue';
 import AppNavigationDrawer from '../components/AppNavigationDrawer.vue';
 import ComponentNavigation from '../components/ComponentNavigation.vue';
@@ -94,11 +94,17 @@ interface ComponentItem {
 }
 
 const router = useRouter();
+const route = useRoute();
 const filterText = ref<string>('');
+
+// Computed property to check if the current route is 'componentDocs'
+const isComponentDocsRoute = computed(() => {
+  return (route.name as any) === 'componentDocs';
+});
 
 function handleNavClick(arg: ComponentItem): void {
   router.push({
-    name: 'componentDoc',
+    name: 'componentDoc' as any,
     params: { componentName: arg.exampleComponent },
     query: { relativePath: arg.relativePath }
   });

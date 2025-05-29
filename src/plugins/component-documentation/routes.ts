@@ -1,6 +1,11 @@
 import { RouteRecordRaw } from 'vue-router';
 import type { RouteLocationNormalized } from 'vue-router';
 
+// Define interface for route parameters
+interface ComponentDocRouteParams {
+  componentName: string;
+}
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/component-docs',
@@ -13,7 +18,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('./views/ComponentDetails.vue'),
         props: (route: RouteLocationNormalized) => ({
           relativePath: route.query.relativePath as string | undefined,
-          componentName: route.params.componentName as string
+          componentName: (route.params as ComponentDocRouteParams).componentName
         })
       }
     ]

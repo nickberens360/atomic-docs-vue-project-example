@@ -63,9 +63,9 @@ const directoryStructure = computed<Record<string, NavigationItem>>(() => {
         lastRef[pathSegment] = { type: 'component', label: pathSegment, relativePath, exampleComponent };
       } else if (!lastRef[pathSegment]) {
         lastRef[pathSegment] = { type: 'directory', label: pathSegment, relativePath, children: {} };
-        lastRef = lastRef[pathSegment].children;
-      } else {
-        lastRef = lastRef[pathSegment].children;
+        lastRef = (lastRef[pathSegment] as DirectoryItem).children;
+      } else if (lastRef[pathSegment].type === 'directory') {
+        lastRef = (lastRef[pathSegment] as DirectoryItem).children;
       }
     });
     return accumulator;
@@ -95,19 +95,48 @@ const finalStructure = computed<Record<string, NavigationItem>>(() => {
   return filterNestedStructure(directoryStructure.value, props.filterText);
 });
 
-function handleNavClick(arg: NavigationItem): void {
+// Add these interfaces to match RecursiveNavItem.vue
+interface ComponentNavItem {
+  type: 'component';
+  label: string;
+  relativePath?: string;
+  exampleComponent?: string;
+}
+
+// Forward declaration of NavItem
+type NavItem = ComponentNavItem | DirectoryNavItem;
+
+interface DirectoryNavItem {
+  type: 'directory';
+  label: string;
+  relativePath?: string;
+  children: Record<string, NavItem>;
+}
+
+function handleNavClick(arg: NavItem): void {
   // Only process component items for navigation
   if (arg.type !== 'component') return;
 
   if (props.onNavClick) {
-    props.onNavClick(arg as ComponentItem);
+    // Make sure relativePath and exampleComponent are defined before passing to onNavClick
+    if (arg.relativePath && arg.exampleComponent) {
+      props.onNavClick({
+        type: 'component',
+        label: arg.label,
+        relativePath: arg.relativePath,
+        exampleComponent: arg.exampleComponent
+      });
+    }
     return;
   }
 
-  router.push({
-    name: 'componentDoc',
-    params: { componentName: arg.exampleComponent },
-    query: { relativePath: arg.relativePath }
-  });
+  // Make sure relativePath and exampleComponent are defined before using them
+  if (arg.relativePath && arg.exampleComponent) {
+    router.push({
+      name: 'componentDoc' as any,
+      params: { componentName: arg.exampleComponent },
+      query: { relativePath: arg.relativePath }
+    });
+  }
 }
 </script>

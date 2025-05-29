@@ -16,7 +16,7 @@
     </template>
     <template #append>
       <div
-        v-if="$route.name !== 'componentDocs'"
+        v-if="!isComponentDocsRoute"
         class="mr-4"
       >
         <VTextField
@@ -40,7 +40,7 @@
           </template>
         </VTextField>
         <v-menu
-          :model-value="$route.name === 'componentDocs'"
+          :model-value="isComponentDocsRoute"
           activator="parent"
           open-on-hover
           open-on-focus
@@ -71,9 +71,9 @@
 
 <script setup lang="ts">
 import { useTheme } from 'vuetify'
-import {ref, watch} from 'vue'
+import {ref, watch, computed} from 'vue'
 import { useAppStore } from '@/stores/app'
-import {useRouter} from "vue-router";
+import {useRouter, useRoute} from "vue-router";
 import ComponentNavigation from "./ComponentNavigation.vue";
 
 // Import the ComponentItem interface from the types used in ComponentNavigation
@@ -85,11 +85,17 @@ interface ComponentItem {
 }
 
 const router = useRouter();
+const route = useRoute();
 const filterText = ref('');
+
+// Computed property to check if the current route is 'componentDocs'
+const isComponentDocsRoute = computed(() => {
+  return (route.name as any) === 'componentDocs';
+});
 
 function handleNavClick(arg: ComponentItem): void {
   router.push({
-    name: 'componentDoc',
+    name: 'componentDoc' as any,
     params: { componentName: arg.exampleComponent },
     query: { relativePath: arg.relativePath }
   });
@@ -105,10 +111,13 @@ function toggleDrawer() {
 }
 
 // Function to toggle the theme
-function toggleTheme(value: boolean) {
+function toggleTheme(value: boolean | null) {
+  // If value is null, default to false or keep the current value
+  const isDark = value !== null ? value : false;
+
   // Sync isDark state in the Pinia store and Vuetify theme
-  appStore.theme.isDark = value
-  theme.global.name.value = value ? 'darkBlueGreyTheme' : 'blueGreyTheme'
+  appStore.theme.isDark = isDark
+  theme.global.name.value = isDark ? 'darkBlueGreyTheme' : 'blueGreyTheme'
 }
 
 // Watch for Vuetify theme changes to keep the store synchronized

@@ -2,7 +2,7 @@
  * router/index.js
  */
 
-import { createRouter, createWebHistory } from 'vue-router/auto'
+import { createRouter, createWebHistory } from 'vue-router'
 import componentDocRoutes from '@/plugins/component-documentation/routes'
 // import { setupAuthGuard } from '@/services/authGuard'
 // import usePermissionsGuard from '@/services/permissionsGuard';
