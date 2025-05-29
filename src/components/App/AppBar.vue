@@ -11,7 +11,7 @@
           class="ml-1"
           @click="appStore.isAppRailOpen = !appStore.isAppRailOpen"
         />
-        Welcome {{ userStore.user.name || 'User' }}
+        Welcome
       </v-toolbar-title>
     </template>
     <template #append>
@@ -44,9 +44,7 @@
 import { useTheme } from 'vuetify'
 import { watch } from 'vue'
 import { useAppStore } from '@/stores/app'
-import { useUserStore } from '@/stores/user'
 
-const userStore = useUserStore()
 const appStore = useAppStore()
 const theme = useTheme()
 

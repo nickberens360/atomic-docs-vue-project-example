@@ -11,7 +11,7 @@
           class="ml-1"
           @click="toggleDrawer"
         />
-        Welcome {{ userStore.user.name || 'User' }}
+        Welcome
       </v-toolbar-title>
     </template>
     <template #append>
@@ -73,7 +73,6 @@
 import { useTheme } from 'vuetify'
 import {ref, watch} from 'vue'
 import { useAppStore } from '@/stores/app'
-import { useUserStore } from '@/stores/user'
 import {useRouter} from "vue-router";
 import ComponentNavigation from "./ComponentNavigation.vue";
 
@@ -96,7 +95,6 @@ function handleNavClick(arg: ComponentItem): void {
   });
 }
 
-const userStore = useUserStore()
 const appStore = useAppStore()
 const theme = useTheme()
 

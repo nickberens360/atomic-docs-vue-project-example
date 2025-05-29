@@ -32,11 +32,9 @@
 
 <script lang="ts" setup>
 import { useAppStore } from '@/stores/app' // adjust the path as needed
-import { useUserStore } from '@/stores/user'
 
 
 const appStore = useAppStore()
-const userStore = useUserStore()
 
 const dismissSnackbar = () => {
   appStore.setSnackbar({
