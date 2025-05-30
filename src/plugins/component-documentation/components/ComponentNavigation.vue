@@ -1,21 +1,21 @@
 <template>
-  <v-list :bg-color="bgColor">
+  <div class="docs-custom-nav-list" :class="bgColor">
     <template
       v-for="(item, key) in finalStructure"
       :key="key"
     >
-      <RecursiveNavItem
+      <DocsRecursiveNavItem
         :nav-items="item"
         @nav-click="handleNavClick"
       />
     </template>
-  </v-list>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import RecursiveNavItem from './RecursiveNavItem.vue';
+import DocsRecursiveNavItem from './RecursiveNavItem.vue';
 
 interface ComponentItem {
   type: 'component';
@@ -140,3 +140,15 @@ function handleNavClick(arg: NavItem): void {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.docs-custom-nav-list {
+  padding: 8px;
+  border-radius: 4px;
+  background-color: white;
+
+  &.background {
+    background-color: #f5f5f5;
+  }
+}
+</style>

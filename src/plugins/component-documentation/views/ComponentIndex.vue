@@ -1,13 +1,13 @@
 <template>
-  <AppBar />
-  <AppNavigationDrawer />
-  <VMain>
-    <v-container fluid>
-      <VRow
+  <DocsAppBar />
+  <DocsAppNavigationDrawer />
+  <DocsMain>
+    <DocsContainer fluid>
+      <DocsRow
         class="h-100"
         :justify="isComponentDocsRoute ? 'center' : 'end'"
       >
-        <VCol
+        <DocsCol
           cols="12"
           md="5"
           sm="6"
@@ -30,7 +30,7 @@
                 class="bg-primary my-4"
               />
             </div>
-            <VTextField
+            <DocsTextField
               v-if="isComponentDocsRoute"
               v-model="filterText"
               name="filter-list"
@@ -41,28 +41,28 @@
               autocomplete="one-time-code"
             >
               <template #append-inner>
-                <VIcon
+                <DocsIcon
                   v-if="filterText"
                   icon="mdi-close"
                   size="18"
                   @click="filterText = ''"
                 />
               </template>
-            </VTextField>
-            <v-menu
+            </DocsTextField>
+            <DocsMenu
               :model-value="isComponentDocsRoute"
               activator="parent"
-              open-on-hover
-              open-on-focus
+              :open-on-hover="true"
+              :open-on-focus="true"
             >
-              <ComponentNavigation
+              <DocsComponentNavigation
                 :filter-text="filterText"
                 :on-nav-click="handleNavClick"
               />
-            </v-menu>
+            </DocsMenu>
           </div>
-        </VCol>
-        <VCol cols="12">
+        </DocsCol>
+        <DocsCol cols="12">
           <div class="content">
             <Suspense>
               <RouterView :key="$route.path" />
@@ -71,19 +71,26 @@
               </template>
             </Suspense>
           </div>
-        </VCol>
-      </VRow>
-    </v-container>
-  </VMain>
+        </DocsCol>
+      </DocsRow>
+    </DocsContainer>
+  </DocsMain>
 </template>
 
 <script setup lang="ts">
 
 import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import AppBar from '../components/AppBar.vue';
-import AppNavigationDrawer from '../components/AppNavigationDrawer.vue';
-import ComponentNavigation from '../components/ComponentNavigation.vue';
+import DocsAppBar from '../components/DocsAppBar.vue';
+import DocsAppNavigationDrawer from '../components/DocsAppNavigationDrawer.vue';
+import DocsComponentNavigation from '../components/ComponentNavigation.vue';
+import DocsRow from '../components/DocsRow.vue';
+import DocsCol from '../components/DocsCol.vue';
+import DocsMain from '../components/DocsMain.vue';
+import DocsContainer from '../components/DocsContainer.vue';
+import DocsTextField from '../components/DocsTextField.vue';
+import DocsIcon from '../components/DocsIcon.vue';
+import DocsMenu from '../components/DocsMenu.vue';
 
 // Import the ComponentItem interface from the types used in ComponentNavigation
 interface ComponentItem {

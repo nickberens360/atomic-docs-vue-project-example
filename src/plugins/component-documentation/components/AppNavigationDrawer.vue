@@ -13,7 +13,7 @@
       :rounded="false"
       color="background"
     >
-      <ComponentNavigation />
+      <DocsComponentNavigation />
     </v-card>
     <!--    <template #append>
       <VList bg-color="background">
@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAppStore } from "@/stores/app";
-import ComponentNavigation from "./ComponentNavigation.vue";
+import DocsComponentNavigation from "./ComponentNavigation.vue";
 
 const appStore = useAppStore();
 const drawer = ref(true);

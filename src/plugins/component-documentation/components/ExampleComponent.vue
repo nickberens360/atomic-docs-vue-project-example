@@ -23,7 +23,7 @@
       Props
     </h2>
     <slot name="props">
-      <VDataTable
+      <DocsDataTable
         :headers="propHeaders"
         :items="computedPropItems"
         hide-default-footer
@@ -40,14 +40,14 @@
             {{ slotProps.value }}
           </slot>
         </template>
-      </VDataTable>
+      </DocsDataTable>
     </slot>
 
     <h2 class="my-4">
       Events
     </h2>
     <slot name="events">
-      <VDataTable
+      <DocsDataTable
         :headers="eventHeaders"
         :items="eventItems"
         hide-default-footer
@@ -64,14 +64,14 @@
             {{ slotProps.value }}
           </slot>
         </template>
-      </VDataTable>
+      </DocsDataTable>
     </slot>
 
     <h2 class="my-4">
       Slots
     </h2>
     <slot name="slots">
-      <VDataTable
+      <DocsDataTable
         :headers="slotHeaders"
         :items="slotItems"
         hide-default-footer
@@ -88,7 +88,7 @@
             {{ slotProps.value }}
           </slot>
         </template>
-      </VDataTable>
+      </DocsDataTable>
     </slot>
   </div>
 </template>
@@ -101,6 +101,7 @@ import {
   getEventHeaders,
   getSlotHeaders
 } from '@/plugins/component-documentation/utils/docGenerator.ts';
+import DocsDataTable from './DocsDataTable.vue';
 
 // Define props directly without TypeScript
 const props = defineProps({

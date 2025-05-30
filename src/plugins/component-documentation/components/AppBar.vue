@@ -40,12 +40,11 @@
           </template>
         </VTextField>
         <v-menu
-          :model-value="isComponentDocsRoute"
           activator="parent"
           open-on-hover
           open-on-focus
         >
-          <ComponentNavigation
+          <DocsComponentNavigation
             :filter-text="filterText"
             :on-nav-click="handleNavClick"
             bg-color="surface"
@@ -74,7 +73,7 @@ import { useTheme } from 'vuetify'
 import {ref, watch, computed} from 'vue'
 import { useAppStore } from '@/stores/app'
 import {useRouter, useRoute} from "vue-router";
-import ComponentNavigation from "./ComponentNavigation.vue";
+import DocsComponentNavigation from "./ComponentNavigation.vue";
 
 // Import the ComponentItem interface from the types used in ComponentNavigation
 interface ComponentItem {
