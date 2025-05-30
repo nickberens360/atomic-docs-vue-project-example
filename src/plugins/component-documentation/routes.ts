@@ -18,7 +18,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('./views/ComponentDetails.vue'),
         props: (route: RouteLocationNormalized) => ({
           relativePath: route.query.relativePath as string | undefined,
-          componentName: (route.params as ComponentDocRouteParams).componentName
+          componentName: (route.params as unknown as ComponentDocRouteParams).componentName
         })
       }
     ]
