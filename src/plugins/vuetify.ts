@@ -1,40 +1,8 @@
 // plugins/vuetify.js -- Framework documentation: https://vuetifyjs.com
 
-// Import Material Design Icons with proper preload hints
-import { createApp } from 'vue';
 import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
-
-// Add proper preload hints for MDI fonts
-const addFontPreloadHints = () => {
-  const fontTypes = [
-    { type: 'font/woff2', ext: 'woff2' },
-    { type: 'font/woff', ext: 'woff' },
-    { type: 'font/ttf', ext: 'ttf' }
-  ];
-
-  fontTypes.forEach(({ type, ext }) => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.href = `/assets/materialdesignicons-webfont.${ext}`;
-    link.as = 'font';
-    link.type = type;
-    link.crossOrigin = 'anonymous';
-    document.head.appendChild(link);
-  });
-};
-
-// Add preload hints as early as possible
-if (document.readyState === 'loading') {
-  // Add preload hints as soon as the DOM is ready
-  document.addEventListener('DOMContentLoaded', addFontPreloadHints);
-} else {
-  // Document already loaded, add preload hints immediately
-  addFontPreloadHints();
-}
-// import { aliases, fa } from 'vuetify/iconsets/fa-svg';
-// import { reformattedIcons } from '@/plugins/fontawesome';
 import { VBtn, VRadio } from 'vuetify/components';
 import colors from 'vuetify/util/colors';
 
