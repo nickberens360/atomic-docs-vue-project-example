@@ -4,6 +4,7 @@
     class="custom-box"
     @click="handleClick"
   >
+    {{ title }}
     <slot />
   </div>
 </template>
@@ -13,11 +14,13 @@ import { computed } from 'vue';
 
 // Define props with default values
 const props = withDefaults(defineProps<{
+  title?: string;
   height: string;
   width: string;
   bgColor: string;
   borderRadius?: string;
 }>(), {
+  title: 'Box',
   height: '150px',
   width: '150px',
   bgColor: '#ff0000',

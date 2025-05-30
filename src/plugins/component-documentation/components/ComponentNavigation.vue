@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import DocsRecursiveNavItem from './RecursiveNavItem.vue';
+import DocsRecursiveNavItem from './DocsRecursiveNavItem.vue';
 
 interface ComponentItem {
   type: 'component';

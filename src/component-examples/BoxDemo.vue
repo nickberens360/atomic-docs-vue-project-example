@@ -1,9 +1,8 @@
 <template>
   <ExampleComponentUsage
-    :component="null"
+    :component="BoxDemo"
     :event-items="eventItems"
     :slot-items="slotItems"
-    :prop-items="propItems"
     expand-props-table
     description="A simple box component."
   >
@@ -91,32 +90,32 @@ const slotItems = [
   },
 ];
 
-const propItems = [
-  {
-    name: 'height',
-    type: 'String',
-    required: 'false',
-    default: '"150px"',
-  },
-  {
-    name: 'width',
-    type: 'String',
-    required: 'false',
-    default: '"150px"',
-  },
-  {
-    name: 'bgColor',
-    type: 'String',
-    required: 'false',
-    default: '"#ff0000"',
-  },
-  {
-    name: 'borderRadius',
-    type: 'String',
-    required: 'false',
-    default: '"8px"',
-  },
-];
+// const propItems = [
+//   {
+//     name: 'height',
+//     type: 'String',
+//     required: 'false',
+//     default: '"150px"',
+//   },
+//   {
+//     name: 'width',
+//     type: 'String',
+//     required: 'false',
+//     default: '"150px"',
+//   },
+//   {
+//     name: 'bgColor',
+//     type: 'String',
+//     required: 'false',
+//     default: '"#ff0000"',
+//   },
+//   {
+//     name: 'borderRadius',
+//     type: 'String',
+//     required: 'false',
+//     default: '"8px"',
+//   },
+// ];
 
 const handleClick = () => {
   console.log('Box clicked');
