@@ -118,7 +118,7 @@ const slotItems = [
 // ];
 
 const handleClick = () => {
-  console.log('Box clicked');
+  alert('Box clicked');
 };
 
 </script>
