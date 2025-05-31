@@ -2,8 +2,8 @@
   <DocsContainer
     class="component-details"
   >
-    <div class="d-flex align-center mb-4">
-      <h2 class="mr-2">
+    <div class="component-header">
+      <h2 class="component-title">
         {{ componentName }}
       </h2>
       <span
@@ -102,19 +102,13 @@ const currentComponent = computed<ComponentType>(() => {
   white-space: nowrap;
 }
 
-.mr-2 {
-  margin-right: 8px;
-}
-
-.d-flex {
+.component-header {
   display: flex;
-}
-
-.align-center {
   align-items: center;
+  margin-bottom: 16px;
 }
 
-.mb-4 {
-  margin-bottom: 16px;
+.component-title {
+  margin-right: 8px;
 }
 </style>

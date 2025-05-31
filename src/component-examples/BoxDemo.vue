@@ -6,7 +6,7 @@
     expand-props-table
     description="A simple box component."
   >
-    <div class="d-flex">
+    <div class="box-demo-container">
       <BoxDemo
         :height="`${height}px`"
         :width="`${width}px`"
@@ -45,7 +45,7 @@
             size="large"
             label
             width="100%"
-            class="d-flex justify-center"
+            class="color-chip"
           >
             Color
           </DocsChip>
@@ -103,4 +103,12 @@ const handleClick = () => {
   lang="scss"
   scoped
 >
+.box-demo-container {
+  display: flex;
+}
+
+.color-chip {
+  display: flex;
+  justify-content: center;
+}
 </style>

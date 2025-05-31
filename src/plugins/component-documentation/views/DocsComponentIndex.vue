@@ -16,18 +16,18 @@
           <div>
             <div v-if="isComponentDocsRoute">
               <p
-                class="text-uppercase font-weight-bold text-center"
+                class="docs-header-text"
                 style="line-height: .80; letter-spacing: -4px;"
               >
                 <span style="font-size: 10vw;">Atomic</span>
                 <span
-                  class="d-block"
+                  class="docs-title-block"
                   style="font-size: 17vw; letter-spacing: -9px;"
                 >Docs</span>
               </p>
               <div
                 style="height: 4px;"
-                class="bg-primary my-4"
+                class="docs-divider"
               />
             </div>
             <DocsTextField
@@ -134,5 +134,21 @@ function handleNavClick(arg: ComponentItem): void {
 .bounce-right {
   display: inline-block;
   animation: bounce-right 1s ease-in-out infinite;
+}
+
+.docs-title-block {
+  display: block;
+}
+
+.docs-header-text {
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+}
+
+.docs-divider {
+  background-color: var(--v-primary-base, #1976d2);
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 </style>

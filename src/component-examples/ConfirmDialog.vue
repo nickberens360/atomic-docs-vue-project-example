@@ -7,7 +7,7 @@
     expand-props-table
     description="A confirmation dialog component that can be used to ask for user confirmation."
   >
-    <div class="d-flex">
+    <div class="dialog-container">
       <v-btn @click="showDialog">Open Dialog</v-btn>
       <ConfirmDialog ref="dialogRef" />
     </div>
@@ -122,4 +122,7 @@ const slotItems = [
   lang="scss"
   scoped
 >
+.dialog-container {
+  display: flex;
+}
 </style>
