@@ -17,6 +17,6 @@ export function registerPlugins (app: App) {
   app
     .use(router)
     .use(pinia)
-    .use(componentDocs)
+    .use(componentDocs as any)
     .use(vuetify)
 }

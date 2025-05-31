@@ -1,7 +1,7 @@
-import { App } from 'vue';
+import { App, Plugin } from 'vue';
 import ExampleComponent from './components/DocsExampleComponent.vue';
 
-export default {
+const componentDocs: Plugin<[]> = {
   install(app: App) {
     const componentModules = import.meta.glob('@/components/**/*.vue');
     const exampleModules = import.meta.glob('@/component-examples/**/*.vue');
@@ -13,10 +13,12 @@ export default {
         componentModules,
         exampleModules
       });
-      app.component('ExampleComponentUsage', ExampleComponent);
+      app.component('ExampleComponentUsage', ExampleComponent as any);
     }
   }
 };
+
+export default componentDocs;
 
 function convertPathToExampleName(path: string): string {
   return 'Example' + path.replace(/ /g, '-')

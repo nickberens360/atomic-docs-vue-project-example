@@ -72,7 +72,7 @@
         <DocsCol cols="12">
           <div class="content">
             <Suspense>
-              <RouterView :key="$route.path" />
+              <RouterView :key="route.path" />
               <template #fallback>
                 Loading...
               </template>
