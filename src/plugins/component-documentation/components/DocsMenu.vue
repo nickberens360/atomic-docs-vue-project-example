@@ -212,10 +212,8 @@ onUnmounted(() => {
 }
 
 // Dark theme support
-:deep(.v-theme--dark) {
-  .docs-menu-content {
-    background-color: #1e1e1e;
-    color: white;
-  }
+.docs-app-theme--dark .docs-menu-content {
+  background-color: #1e1e1e;
+  color: white;
 }
 </style>

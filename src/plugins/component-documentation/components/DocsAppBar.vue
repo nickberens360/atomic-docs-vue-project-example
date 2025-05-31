@@ -70,8 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from 'vuetify'
-import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAppStore } from '@/stores/app'
 import { useRouter, useRoute } from "vue-router";
 import DocsComponentNavigation from "./DocsComponentNavigation.vue";
@@ -104,7 +103,6 @@ function handleNavClick(arg: ComponentItem): void {
 }
 
 const appStore = useAppStore()
-const theme = useTheme()
 
 // Function to toggle the drawer and rail
 function toggleDrawer() {
@@ -117,18 +115,18 @@ function toggleTheme(value: boolean | null) {
   // If value is null, default to false or keep the current value
   const isDark = value !== null ? value : false;
 
-  // Sync isDark state in the Pinia store and Vuetify theme
+  // Update the theme in the store
   appStore.theme.isDark = isDark
-  theme.global.name.value = isDark ? 'darkBlueGreyTheme' : 'blueGreyTheme'
-}
 
-// Watch for Vuetify theme changes to keep the store synchronized
-watch(
-  () => theme.global.current.value.dark,
-  (newValue) => {
-    appStore.theme.isDark = newValue
+  // Apply theme class to document body
+  if (isDark) {
+    document.body.classList.add('docs-app-theme--dark')
+    document.body.classList.remove('docs-app-theme--light')
+  } else {
+    document.body.classList.add('docs-app-theme--light')
+    document.body.classList.remove('docs-app-theme--dark')
   }
-)
+}
 
 // Add event listeners for menu
 const handleMouseEnter = () => {
@@ -145,6 +143,15 @@ onMounted(() => {
   if (searchContainer) {
     searchContainer.addEventListener('mouseenter', handleMouseEnter);
     searchContainer.addEventListener('mouseleave', handleMouseLeave);
+  }
+
+  // Initialize theme class based on current theme setting
+  if (appStore.theme.isDark) {
+    document.body.classList.add('docs-app-theme--dark');
+    document.body.classList.remove('docs-app-theme--light');
+  } else {
+    document.body.classList.add('docs-app-theme--light');
+    document.body.classList.remove('docs-app-theme--dark');
   }
 });
 
@@ -169,7 +176,7 @@ onUnmounted(() => {
   align-items: center;
   height: 64px;
   width: 100%;
-  background-color: var(--v-background-base, #f5f5f5);
+  background-color: var(--docs-background-color, #f5f5f5);
   box-shadow: none;
   padding: 0 16px;
   z-index: 100;

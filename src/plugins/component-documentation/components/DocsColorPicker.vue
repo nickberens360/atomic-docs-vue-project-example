@@ -12,7 +12,7 @@
         @change="updateColor"
       />
     </div>
-    
+
     <!-- Color canvas -->
     <div class="docs-color-canvas-container">
       <canvas 
@@ -29,7 +29,7 @@
         }"
       ></div>
     </div>
-    
+
     <!-- Hue slider -->
     <div class="docs-hue-container">
       <div 
@@ -43,7 +43,7 @@
         :style="{ left: `${huePosition}%` }"
       ></div>
     </div>
-    
+
     <!-- Alpha slider (optional) -->
     <div v-if="showAlpha" class="docs-alpha-container">
       <div 
@@ -108,28 +108,28 @@ let isDraggingAlpha = false;
 function hexToHsv(hex: string): { h: number, s: number, v: number, a: number } {
   // Remove # if present
   hex = hex.replace('#', '');
-  
+
   // Parse alpha if present
   let alpha = 1;
   if (hex.length === 8) {
     alpha = parseInt(hex.slice(6, 8), 16) / 255;
     hex = hex.slice(0, 6);
   }
-  
+
   // Convert hex to RGB
   const r = parseInt(hex.slice(0, 2), 16) / 255;
   const g = parseInt(hex.slice(2, 4), 16) / 255;
   const b = parseInt(hex.slice(4, 6), 16) / 255;
-  
+
   // Calculate HSV
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   const delta = max - min;
-  
+
   let h = 0;
   const s = max === 0 ? 0 : delta / max;
   const v = max;
-  
+
   if (delta === 0) {
     h = 0;
   } else if (max === r) {
@@ -139,10 +139,10 @@ function hexToHsv(hex: string): { h: number, s: number, v: number, a: number } {
   } else {
     h = (r - g) / delta + 4;
   }
-  
+
   h = Math.round(h * 60);
   if (h < 0) h += 360;
-  
+
   return { h, s, v, a: alpha };
 }
 
@@ -151,9 +151,9 @@ function hsvToHex(h: number, s: number, v: number, a: number = 1): string {
   const c = v * s;
   const x = c * (1 - Math.abs((h / 60) % 2 - 1));
   const m = v - c;
-  
+
   let r = 0, g = 0, b = 0;
-  
+
   if (h >= 0 && h < 60) {
     r = c; g = x; b = 0;
   } else if (h >= 60 && h < 120) {
@@ -167,24 +167,24 @@ function hsvToHex(h: number, s: number, v: number, a: number = 1): string {
   } else {
     r = c; g = 0; b = x;
   }
-  
+
   // Adjust for value
   r = Math.round((r + m) * 255);
   g = Math.round((g + m) * 255);
   b = Math.round((b + m) * 255);
-  
+
   // Convert to hex
   const toHex = (n: number) => {
     const hex = n.toString(16);
     return hex.length === 1 ? '0' + hex : hex;
   };
-  
+
   // Add alpha if needed
   let alphaHex = '';
   if (a < 1) {
     alphaHex = toHex(Math.round(a * 255));
   }
-  
+
   return `#${toHex(r)}${toHex(g)}${toHex(b)}${alphaHex}`;
 }
 
@@ -193,9 +193,9 @@ function getRgbaColor(h: number, s: number, v: number, a: number): string {
   const c = v * s;
   const x = c * (1 - Math.abs((h / 60) % 2 - 1));
   const m = v - c;
-  
+
   let r = 0, g = 0, b = 0;
-  
+
   if (h >= 0 && h < 60) {
     r = c; g = x; b = 0;
   } else if (h >= 60 && h < 120) {
@@ -209,39 +209,39 @@ function getRgbaColor(h: number, s: number, v: number, a: number): string {
   } else {
     r = c; g = 0; b = x;
   }
-  
+
   // Adjust for value
   r = Math.round((r + m) * 255);
   g = Math.round((g + m) * 255);
   b = Math.round((b + m) * 255);
-  
+
   return `rgba(${r}, ${g}, ${b}, ${a})`;
 }
 
 // Initialize canvas
 function initCanvas() {
   if (!saturationCanvas.value) return;
-  
+
   const canvas = saturationCanvas.value;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-  
+
   // Set canvas size
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
-  
+
   // Draw saturation-value gradient
   const gradientH = ctx.createLinearGradient(0, 0, canvas.width, 0);
   gradientH.addColorStop(0, '#fff');
   gradientH.addColorStop(1, `hsl(${currentHue.value}, 100%, 50%)`);
-  
+
   ctx.fillStyle = gradientH;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   const gradientV = ctx.createLinearGradient(0, 0, 0, canvas.height);
   gradientV.addColorStop(0, 'rgba(0, 0, 0, 0)');
   gradientV.addColorStop(1, '#000');
-  
+
   ctx.fillStyle = gradientV;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
@@ -266,10 +266,10 @@ function updateColor() {
     colorValue.value = props.modelValue;
     return;
   }
-  
+
   // Update internal state
   updateFromHex(colorValue.value);
-  
+
   // Emit update event
   emit('update:modelValue', colorValue.value);
 }
@@ -277,21 +277,21 @@ function updateColor() {
 // Update internal state from hex value
 function updateFromHex(hex: string) {
   const { h, s, v, a } = hexToHsv(hex);
-  
+
   currentHue.value = h;
   currentSaturation.value = s;
   currentValue.value = v;
   currentAlpha.value = a;
-  
+
   // Update positions
   saturationPointerPosition.value = {
     x: s * 100,
     y: (1 - v) * 100
   };
-  
+
   huePosition.value = (h / 360) * 100;
   alphaPosition.value = a * 100;
-  
+
   // Update canvas
   initCanvas();
 }
@@ -300,7 +300,7 @@ function updateFromHex(hex: string) {
 function startSaturationDrag(event: MouseEvent | TouchEvent) {
   event.preventDefault();
   isDraggingSaturation = true;
-  
+
   if (event instanceof MouseEvent) {
     handleSaturationDrag(event);
     document.addEventListener('mousemove', handleSaturationDrag);
@@ -314,24 +314,24 @@ function startSaturationDrag(event: MouseEvent | TouchEvent) {
 
 function handleSaturationDrag(event: MouseEvent | Touch) {
   if (!isDraggingSaturation || !saturationCanvas.value) return;
-  
+
   const rect = saturationCanvas.value.getBoundingClientRect();
-  
+
   // Calculate position as percentage
   let x = ((event.clientX - rect.left) / rect.width) * 100;
   let y = ((event.clientY - rect.top) / rect.height) * 100;
-  
+
   // Clamp values
   x = Math.max(0, Math.min(100, x));
   y = Math.max(0, Math.min(100, y));
-  
+
   // Update pointer position
   saturationPointerPosition.value = { x, y };
-  
+
   // Update saturation and value
   currentSaturation.value = x / 100;
   currentValue.value = 1 - (y / 100);
-  
+
   // Update color
   colorValue.value = hsvToHex(
     currentHue.value, 
@@ -339,7 +339,7 @@ function handleSaturationDrag(event: MouseEvent | Touch) {
     currentValue.value,
     currentAlpha.value
   );
-  
+
   // Emit update
   emit('update:modelValue', colorValue.value);
 }
@@ -360,7 +360,7 @@ function endSaturationDrag() {
 function startHueDrag(event: MouseEvent | TouchEvent) {
   event.preventDefault();
   isDraggingHue = true;
-  
+
   if (event instanceof MouseEvent) {
     handleHueDrag(event);
     document.addEventListener('mousemove', handleHueDrag);
@@ -374,21 +374,21 @@ function startHueDrag(event: MouseEvent | TouchEvent) {
 
 function handleHueDrag(event: MouseEvent | Touch) {
   if (!isDraggingHue || !hueTrack.value) return;
-  
+
   const rect = hueTrack.value.getBoundingClientRect();
-  
+
   // Calculate position as percentage
   let x = ((event.clientX - rect.left) / rect.width) * 100;
-  
+
   // Clamp values
   x = Math.max(0, Math.min(100, x));
-  
+
   // Update hue position
   huePosition.value = x;
-  
+
   // Update hue value (0-360)
   currentHue.value = Math.round((x / 100) * 360);
-  
+
   // Update color
   colorValue.value = hsvToHex(
     currentHue.value, 
@@ -396,7 +396,7 @@ function handleHueDrag(event: MouseEvent | Touch) {
     currentValue.value,
     currentAlpha.value
   );
-  
+
   // Emit update
   emit('update:modelValue', colorValue.value);
 }
@@ -416,10 +416,10 @@ function endHueDrag() {
 // Alpha drag handlers
 function startAlphaDrag(event: MouseEvent | TouchEvent) {
   if (!props.showAlpha) return;
-  
+
   event.preventDefault();
   isDraggingAlpha = true;
-  
+
   if (event instanceof MouseEvent) {
     handleAlphaDrag(event);
     document.addEventListener('mousemove', handleAlphaDrag);
@@ -433,21 +433,21 @@ function startAlphaDrag(event: MouseEvent | TouchEvent) {
 
 function handleAlphaDrag(event: MouseEvent | Touch) {
   if (!isDraggingAlpha || !alphaTrack.value) return;
-  
+
   const rect = alphaTrack.value.getBoundingClientRect();
-  
+
   // Calculate position as percentage
   let x = ((event.clientX - rect.left) / rect.width) * 100;
-  
+
   // Clamp values
   x = Math.max(0, Math.min(100, x));
-  
+
   // Update alpha position
   alphaPosition.value = x;
-  
+
   // Update alpha value (0-1)
   currentAlpha.value = x / 100;
-  
+
   // Update color
   colorValue.value = hsvToHex(
     currentHue.value, 
@@ -455,7 +455,7 @@ function handleAlphaDrag(event: MouseEvent | Touch) {
     currentValue.value,
     currentAlpha.value
   );
-  
+
   // Emit update
   emit('update:modelValue', colorValue.value);
 }
@@ -476,10 +476,10 @@ function endAlphaDrag() {
 onMounted(() => {
   // Initialize from props
   updateFromHex(props.modelValue);
-  
+
   // Initialize canvas
   initCanvas();
-  
+
   // Handle window resize
   window.addEventListener('resize', initCanvas);
 });
@@ -624,16 +624,14 @@ onUnmounted(() => {
 }
 
 // Dark theme support
-:deep(.v-theme--dark) {
-  .docs-color-picker {
-    background-color: #1e1e1e;
-    color: white;
-  }
-  
-  .docs-color-input {
-    background-color: #333;
-    color: white;
-    border-color: rgba(255, 255, 255, 0.2);
-  }
+.docs-app-theme--dark .docs-color-picker {
+  background-color: #1e1e1e;
+  color: white;
+}
+
+.docs-app-theme--dark .docs-color-input {
+  background-color: #333;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 </style>

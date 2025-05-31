@@ -55,35 +55,35 @@ watch(() => appStore.isAppRailOpen, (newValue) => {
   left: 0;
   bottom: 0;
   width: 256px;
-  background-color: var(--v-background-base, #f5f5f5);
+  background-color: var(--docs-background-color, #f5f5f5);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, width 0.3s ease;
   overflow-y: auto;
   z-index: 100;
-  
+
   // Closed state
   transform: translateX(-100%);
-  
+
   // Open state
   &--open {
     transform: translateX(0);
   }
-  
+
   // Rail state (collapsed)
   &--rail {
     width: 56px;
     overflow: hidden;
-    
+
     .docs-navigation-content {
       opacity: 0;
       visibility: hidden;
     }
   }
-  
+
   // Expanded state (on hover when in rail mode)
   &--rail.docs-navigation-drawer--expanded {
     width: 256px;
-    
+
     .docs-navigation-content {
       opacity: 1;
       visibility: visible;

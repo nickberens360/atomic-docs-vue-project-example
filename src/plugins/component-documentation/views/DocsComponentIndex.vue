@@ -147,7 +147,7 @@ function handleNavClick(arg: ComponentItem): void {
 }
 
 .docs-divider {
-  background-color: var(--v-primary-base, #1976d2);
+  background-color: var(--docs-primary-color, #1976d2);
   margin-top: 16px;
   margin-bottom: 16px;
 }
