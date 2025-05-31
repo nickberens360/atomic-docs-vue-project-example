@@ -20,3 +20,27 @@ You will need to add the documentation routes to your router, the can be importe
 - Vuetify
 - VueRouter
 - Vite
+
+## Testing
+
+This plugin uses Vitest for testing components. The following test commands are available:
+
+- `npm test` - Run all tests once
+- `npm run test:watch` - Run tests in watch mode (tests rerun when files change)
+- `npm run test:coverage` - Run tests with coverage report
+- `npm run test:ui` - Run tests with the Vitest UI interface
+
+### Vitest UI
+
+Vitest UI provides a graphical interface for running and debugging tests. To use it:
+
+1. Run `npm run test:ui` in the component-documentation directory
+2. A browser window will open with the Vitest UI interface
+3. Use the interface to run specific tests, view test results, and debug failures
+
+The UI provides features like:
+- Interactive test explorer
+- Real-time test feedback
+- Detailed error reporting
+- Test filtering
+- Time travel debugging
