@@ -32,7 +32,7 @@
         max="600"
         hide-details
       />
-      <v-menu
+      <DocsMenu
         v-if="item.name === 'bgColor'"
         :close-on-content-click="false"
       >
@@ -54,7 +54,7 @@
           v-model="bgColor"
           label="bgColor"
         />
-      </v-menu>
+      </DocsMenu>
       <DocsSlider
         v-if="item.name === 'borderRadius'"
         v-model="borderRadius"
@@ -69,6 +69,7 @@
 <script setup lang="ts">
 import BoxDemo from '@/components/BoxDemo.vue';
 import DocsSlider from '@/plugins/component-documentation/components/DocsSlider.vue';
+import DocsMenu from '@/plugins/component-documentation/components/DocsMenu.vue';
 
 const height = ref(150);
 const width = ref(150);
@@ -90,33 +91,6 @@ const slotItems = [
     description: 'Slot for custom actions.',
   },
 ];
-
-// const propItems = [
-//   {
-//     name: 'height',
-//     type: 'String',
-//     required: 'false',
-//     default: '"150px"',
-//   },
-//   {
-//     name: 'width',
-//     type: 'String',
-//     required: 'false',
-//     default: '"150px"',
-//   },
-//   {
-//     name: 'bgColor',
-//     type: 'String',
-//     required: 'false',
-//     default: '"#ff0000"',
-//   },
-//   {
-//     name: 'borderRadius',
-//     type: 'String',
-//     required: 'false',
-//     default: '"8px"',
-//   },
-// ];
 
 const handleClick = () => {
   alert('Box clicked');
