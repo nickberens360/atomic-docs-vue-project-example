@@ -2,8 +2,8 @@
   <aside 
     class="docs-navigation-drawer" 
     :class="{
-      'docs-navigation-drawer--open': appStore.isAppNavDrawerOpen,
-      'docs-navigation-drawer--rail': appStore.isAppRailOpen,
+      'docs-navigation-drawer--open': props.isNavDrawerOpen,
+      'docs-navigation-drawer--rail': props.isRailOpen,
       'docs-navigation-drawer--expanded': isExpanded
     }"
     @mouseenter="handleMouseEnter"
@@ -21,27 +21,31 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useAppStore } from "@/stores/app";
 import DocsComponentNavigation from "./DocsComponentNavigation.vue";
 
-const appStore = useAppStore();
+// Define props
+const props = defineProps<{
+  isRailOpen: boolean;
+  isNavDrawerOpen: boolean;
+}>();
+
 const isExpanded = ref(false);
 
 // Handle expand-on-hover functionality
 const handleMouseEnter = () => {
-  if (appStore.isAppRailOpen) {
+  if (props.isRailOpen) {
     isExpanded.value = true;
   }
 };
 
 const handleMouseLeave = () => {
-  if (appStore.isAppRailOpen) {
+  if (props.isRailOpen) {
     isExpanded.value = false;
   }
 };
 
 // Watch for changes to the rail state
-watch(() => appStore.isAppRailOpen, (newValue) => {
+watch(() => props.isRailOpen, (newValue) => {
   if (!newValue) {
     isExpanded.value = false;
   }

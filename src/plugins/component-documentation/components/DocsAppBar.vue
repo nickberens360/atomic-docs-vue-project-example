@@ -53,12 +53,12 @@
 
         <div class="docs-theme-toggle">
           <span class="docs-theme-icon">
-            {{ appStore.theme.isDark ? '🌙' : '☀️' }}
+            {{ props.isDark ? '🌙' : '☀️' }}
           </span>
           <label class="docs-switch">
             <input 
               type="checkbox"
-              :checked="appStore.theme.isDark"
+              :checked="props.isDark"
               @change="toggleTheme(($event.target as HTMLInputElement).checked)"
             >
             <span class="docs-slider" />
@@ -71,7 +71,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useAppStore } from '@/stores/app'
 import { useRouter, useRoute } from "vue-router";
 import DocsComponentNavigation from "./DocsComponentNavigation.vue";
 
@@ -82,6 +81,16 @@ interface ComponentItem {
   relativePath: string;
   exampleComponent: string;
 }
+
+// Define props and emits
+const props = defineProps<{
+  isDark: boolean
+}>();
+
+const emit = defineEmits<{
+  (e: 'toggle-theme', value: boolean): void
+  (e: 'toggle-drawer'): void
+}>();
 
 const router = useRouter();
 const route = useRoute();
@@ -102,24 +111,21 @@ function handleNavClick(arg: ComponentItem): void {
   isMenuOpen.value = false;
 }
 
-const appStore = useAppStore()
-
 // Function to toggle the drawer and rail
 function toggleDrawer() {
-  appStore.isAppRailOpen = !appStore.isAppRailOpen
-  appStore.isAppNavDrawerOpen = !appStore.isAppNavDrawerOpen
+  emit('toggle-drawer');
 }
 
 // Function to toggle the theme
 function toggleTheme(value: boolean | null) {
   // If value is null, default to false or keep the current value
-  const isDark = value !== null ? value : false;
+  const isDarkValue = value !== null ? value : false;
 
-  // Update the theme in the store
-  appStore.theme.isDark = isDark
+  // Emit the theme change event
+  emit('toggle-theme', isDarkValue);
 
   // Apply theme class to document body
-  if (isDark) {
+  if (isDarkValue) {
     document.body.classList.add('docs-app-theme--dark')
     document.body.classList.remove('docs-app-theme--light')
   } else {
@@ -146,7 +152,7 @@ onMounted(() => {
   }
 
   // Initialize theme class based on current theme setting
-  if (appStore.theme.isDark) {
+  if (props.isDark) {
     document.body.classList.add('docs-app-theme--dark');
     document.body.classList.remove('docs-app-theme--light');
   } else {

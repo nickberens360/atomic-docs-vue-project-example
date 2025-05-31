@@ -1,5 +1,8 @@
 <template>
-  <div class="docs-custom-nav-list" :class="bgColor">
+  <div
+    class="docs-custom-nav-list"
+    :class="bgColor"
+  >
     <template
       v-for="(item, key) in finalStructure"
       :key="key"

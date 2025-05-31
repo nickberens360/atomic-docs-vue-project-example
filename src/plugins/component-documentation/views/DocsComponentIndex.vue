@@ -1,6 +1,13 @@
 <template>
-  <DocsAppBar />
-  <DocsAppNavigationDrawer />
+  <DocsAppBar 
+    :is-dark="isDark" 
+    @toggle-theme="toggleTheme"
+    @toggle-drawer="toggleDrawer"
+  />
+  <DocsAppNavigationDrawer 
+    :is-rail-open="isRailOpen"
+    :is-nav-drawer-open="isNavDrawerOpen"
+  />
   <DocsMain>
     <DocsContainer fluid>
       <DocsRow
@@ -103,6 +110,23 @@ interface ComponentItem {
 const router = useRouter();
 const route = useRoute();
 const filterText = ref<string>('');
+
+// Local state for theme and navigation
+const isDark = ref(false);
+const isRailOpen = ref(false);
+const isNavDrawerOpen = ref(true);
+
+// Function to toggle theme
+function toggleTheme(value: boolean) {
+  isDark.value = value;
+  // Apply theme changes to document or CSS variables
+}
+
+// Function to toggle drawer
+function toggleDrawer() {
+  isRailOpen.value = !isRailOpen.value;
+  isNavDrawerOpen.value = !isNavDrawerOpen.value;
+}
 
 // Computed property to check if the current route is 'componentDocs'
 const isComponentDocsRoute = computed(() => {
