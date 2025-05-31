@@ -1,17 +1,17 @@
 <template>
-  <VContainer
+  <DocsContainer
     class="component-details"
   >
     <div class="d-flex align-center mb-4">
       <h2 class="mr-2">
         {{ componentName }}
       </h2>
-      <VChip
+      <span
         v-if="props.relativePath"
-        size="small"
+        class="docs-chip"
       >
         {{ props.relativePath }}
-      </VChip>
+      </span>
     </div>
     <Suspense>
       <Component :is="currentComponent" />
@@ -20,12 +20,13 @@
         Loading...
       </template>
     </Suspense>
-  </VContainer>
+  </DocsContainer>
 </template>
 
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 import ComponentNotDocumented from '../components/ComponentNotDocumented.vue';
+import DocsContainer from '../components/DocsContainer.vue';
 
 // Define a custom type for component definitions
 type ComponentType = any;
@@ -87,5 +88,33 @@ const currentComponent = computed<ComponentType>(() => {
 :deep(.example-component mark) {
   background-color: transparent;
   color: #9E9E9E;
+}
+
+.docs-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  height: 24px;
+  font-size: 12px;
+  border-radius: 16px;
+  background-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.87);
+  white-space: nowrap;
+}
+
+.mr-2 {
+  margin-right: 8px;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
 }
 </style>
