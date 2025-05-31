@@ -59,7 +59,7 @@
             <input 
               type="checkbox"
               :checked="appStore.theme.isDark"
-              @change="toggleTheme($event.target.checked)"
+              @change="toggleTheme(($event.target as HTMLInputElement).checked)"
             >
             <span class="docs-slider" />
           </label>

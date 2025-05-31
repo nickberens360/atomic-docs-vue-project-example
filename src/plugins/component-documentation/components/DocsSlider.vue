@@ -73,28 +73,28 @@ const handleTrackClick = (event: MouseEvent) => {
   const clickPosition = event.clientX - rect.left;
   const trackWidth = rect.width;
   const percentage = clickPosition / trackWidth;
-  
+
   const range = maxValue.value - minValue.value;
   let newValue = minValue.value + (percentage * range);
-  
+
   // Apply step if provided
   if (props.step > 0) {
     newValue = Math.round(newValue / props.step) * props.step;
   }
-  
+
   // Ensure value is within bounds
   newValue = Math.max(minValue.value, Math.min(maxValue.value, newValue));
-  
+
   emit('update:modelValue', newValue);
 };
 
 // Drag handling
 const startDrag = (event: MouseEvent | TouchEvent) => {
   isDragging.value = true;
-  
+
   // Prevent default to avoid text selection during drag
   event.preventDefault();
-  
+
   // Add event listeners for drag and end events
   if (event.type === 'mousedown') {
     document.addEventListener('mousemove', handleDrag);
@@ -107,13 +107,13 @@ const startDrag = (event: MouseEvent | TouchEvent) => {
 
 const handleDrag = (event: MouseEvent | TouchEvent) => {
   if (!isDragging.value) return;
-  
+
   // Get the track element
   const trackElement = document.querySelector('.docs-slider-track-container') as HTMLElement;
   if (!trackElement) return;
-  
+
   const rect = trackElement.getBoundingClientRect();
-  
+
   // Get client X position based on event type
   let clientX: number;
   if ('touches' in event) {
@@ -121,28 +121,28 @@ const handleDrag = (event: MouseEvent | TouchEvent) => {
   } else {
     clientX = event.clientX;
   }
-  
+
   // Calculate position and value
   const position = clientX - rect.left;
   const percentage = Math.max(0, Math.min(1, position / rect.width));
-  
+
   const range = maxValue.value - minValue.value;
   let newValue = minValue.value + (percentage * range);
-  
+
   // Apply step if provided
   if (props.step > 0) {
     newValue = Math.round(newValue / props.step) * props.step;
   }
-  
+
   // Ensure value is within bounds
   newValue = Math.max(minValue.value, Math.min(maxValue.value, newValue));
-  
+
   emit('update:modelValue', newValue);
 };
 
 const endDrag = () => {
   isDragging.value = false;
-  
+
   // Remove event listeners
   document.removeEventListener('mousemove', handleDrag);
   document.removeEventListener('mouseup', endDrag);
@@ -154,7 +154,7 @@ const endDrag = () => {
 onMounted(() => {
   const trackContainer = document.querySelector('.docs-slider-track-container');
   if (trackContainer) {
-    trackContainer.addEventListener('click', handleTrackClick);
+    trackContainer.addEventListener('click', handleTrackClick as EventListener);
   }
 });
 
@@ -162,9 +162,9 @@ onMounted(() => {
 onUnmounted(() => {
   const trackContainer = document.querySelector('.docs-slider-track-container');
   if (trackContainer) {
-    trackContainer.removeEventListener('click', handleTrackClick);
+    trackContainer.removeEventListener('click', handleTrackClick as EventListener);
   }
-  
+
   // Remove any lingering drag handlers
   document.removeEventListener('mousemove', handleDrag);
   document.removeEventListener('mouseup', endDrag);
@@ -177,7 +177,7 @@ onUnmounted(() => {
 .docs-slider {
   width: 100%;
   padding: 8px 0;
-  
+
   &-label {
     display: flex;
     justify-content: space-between;
@@ -185,7 +185,7 @@ onUnmounted(() => {
     color: rgba(0, 0, 0, 0.6);
     margin-bottom: 8px;
   }
-  
+
   &-thumb-label {
     background-color: #1976d2;
     color: white;
@@ -193,7 +193,7 @@ onUnmounted(() => {
     border-radius: 4px;
     font-size: 12px;
   }
-  
+
   &-track-container {
     position: relative;
     height: 4px;
@@ -202,7 +202,7 @@ onUnmounted(() => {
     border-radius: 2px;
     cursor: pointer;
   }
-  
+
   &-track {
     position: absolute;
     top: 0;
@@ -211,7 +211,7 @@ onUnmounted(() => {
     bottom: 0;
     border-radius: 2px;
   }
-  
+
   &-track-fill {
     position: absolute;
     top: 0;
@@ -220,7 +220,7 @@ onUnmounted(() => {
     background-color: #1976d2;
     border-radius: 2px;
   }
-  
+
   &-thumb {
     position: absolute;
     top: 50%;
@@ -231,13 +231,13 @@ onUnmounted(() => {
     transform: translate(-50%, -50%);
     cursor: grab;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    
+
     &:active {
       cursor: grabbing;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
     }
   }
-  
+
   &-details {
     display: flex;
     justify-content: space-between;

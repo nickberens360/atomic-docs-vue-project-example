@@ -12,7 +12,7 @@
         :placeholder="placeholder"
         class="docs-input"
         :autocomplete="autocomplete"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
       <span v-if="$slots['append-inner']" class="docs-append-icon">
         <slot name="append-inner"></slot>
@@ -49,7 +49,7 @@ defineEmits(['update:modelValue']);
 .docs-text-field {
   width: 100%;
   margin-bottom: 8px;
-  
+
   &--solo {
     .docs-input-wrapper {
       background-color: white;
@@ -66,7 +66,7 @@ defineEmits(['update:modelValue']);
   border: 1px solid rgba(0, 0, 0, 0.23);
   border-radius: 4px;
   transition: border-color 0.2s;
-  
+
   &:focus-within {
     border-color: #1976d2;
   }

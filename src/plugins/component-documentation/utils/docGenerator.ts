@@ -14,6 +14,14 @@ interface Props {
 
 interface Component {
   props?: Props;
+  name?: string;
+  prototype?: object;
+  __vccOpts?: { props?: Props };
+  setup?: Function;
+  defaults?: any;
+  type?: any;
+  __proto__?: any;
+  [key: string]: any; // Add index signature to allow string indexing
 }
 
 interface PropItem {
