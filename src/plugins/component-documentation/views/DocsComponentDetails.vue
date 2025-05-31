@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { computed, inject } from 'vue';
-import ComponentNotDocumented from '../components/ComponentNotDocumented.vue';
+import DocsComponentNotDocumented from '../components/DocsComponentNotDocumented.vue';
 import DocsContainer from '../components/DocsContainer.vue';
 
 // Define a custom type for component definitions
@@ -72,20 +72,20 @@ const currentComponent = computed<ComponentType>(() => {
   if (exampleComponents[props.componentName]) {
     return exampleComponents[props.componentName].default;
   } else {
-    return ComponentNotDocumented;
+    return DocsComponentNotDocumented;
   }
 });
 </script>
 
 <style lang="scss" scoped>
-:deep(.example-component code) {
+::deep(.example-component code) {
   background-color: #e3e3e3;
   color: red;
   font-size: 0.8em;
   padding: 2px;
   border-radius: 1px;
 }
-:deep(.example-component mark) {
+::deep(.example-component mark) {
   background-color: transparent;
   color: #9E9E9E;
 }

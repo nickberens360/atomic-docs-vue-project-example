@@ -83,7 +83,7 @@ import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import DocsAppBar from '../components/DocsAppBar.vue';
 import DocsAppNavigationDrawer from '../components/DocsAppNavigationDrawer.vue';
-import DocsComponentNavigation from '../components/ComponentNavigation.vue';
+import DocsComponentNavigation from '../components/DocsComponentNavigation.vue';
 import DocsRow from '../components/DocsRow.vue';
 import DocsCol from '../components/DocsCol.vue';
 import DocsMain from '../components/DocsMain.vue';

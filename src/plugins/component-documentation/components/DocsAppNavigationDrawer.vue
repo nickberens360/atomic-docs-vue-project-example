@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useAppStore } from "@/stores/app";
-import DocsComponentNavigation from "./ComponentNavigation.vue";
+import DocsComponentNavigation from "./DocsComponentNavigation.vue";
 
 const appStore = useAppStore();
 const isExpanded = ref(false);

@@ -25,7 +25,7 @@
                 placeholder="Search Components"
                 class="docs-input"
                 autocomplete="one-time-code"
-              />
+              >
               <span 
                 v-if="filterText" 
                 class="docs-append-icon" 
@@ -38,8 +38,8 @@
 
           <div class="docs-menu-container">
             <div 
-              class="docs-menu"
               v-show="isMenuOpen"
+              class="docs-menu"
               @mouseleave="isMenuOpen = false"
             >
               <DocsComponentNavigation
@@ -60,8 +60,8 @@
               type="checkbox"
               :checked="appStore.theme.isDark"
               @change="toggleTheme($event.target.checked)"
-            />
-            <span class="docs-slider"></span>
+            >
+            <span class="docs-slider" />
           </label>
         </div>
       </div>
@@ -74,7 +74,7 @@ import { useTheme } from 'vuetify'
 import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
 import { useAppStore } from '@/stores/app'
 import { useRouter, useRoute } from "vue-router";
-import DocsComponentNavigation from "./ComponentNavigation.vue";
+import DocsComponentNavigation from "./DocsComponentNavigation.vue";
 
 // Import the ComponentItem interface from the types used in ComponentNavigation
 interface ComponentItem {

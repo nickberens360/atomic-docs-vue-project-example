@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import ExampleComponent from './components/ExampleComponent.vue';
+import ExampleComponent from './components/DocsExampleComponent.vue';
 
 export default {
   install(app: App) {

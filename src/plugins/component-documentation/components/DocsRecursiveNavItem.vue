@@ -13,7 +13,7 @@
         v-for="(child, i) in sortedChildren"
         :key="i"
       >
-        <RecursiveNavItem
+        <DocsRecursiveNavItem
           v-if="child.type === 'directory'"
           :nav-items="child"
           @nav-click="emit('nav-click', $event)"
@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import RecursiveNavItem from './RecursiveNavItem.vue';
+import DocsRecursiveNavItem from './DocsRecursiveNavItem.vue';
 
 // Define interfaces for the component's props
 interface ComponentNavItem {
