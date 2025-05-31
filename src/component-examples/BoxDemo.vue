@@ -16,7 +16,7 @@
       />
     </div>
     <template #[`item.actions`]="{item}">
-      <v-slider
+      <DocsSlider
         v-if="item.name === 'width'"
         v-model="width"
         label="width"
@@ -24,7 +24,7 @@
         max="600"
         hide-details
       />
-      <v-slider
+      <DocsSlider
         v-if="item.name === 'height'"
         v-model="height"
         thumb-label
@@ -55,7 +55,7 @@
           label="bgColor"
         />
       </v-menu>
-      <v-slider
+      <DocsSlider
         v-if="item.name === 'borderRadius'"
         v-model="borderRadius"
         thumb-label
@@ -68,6 +68,7 @@
 </template>
 <script setup lang="ts">
 import BoxDemo from '@/components/BoxDemo.vue';
+import DocsSlider from '@/plugins/component-documentation/components/DocsSlider.vue';
 
 const height = ref(150);
 const width = ref(150);
