@@ -11,12 +11,12 @@ import router from '../router/index'
 import componentDocs from '@/plugins/component-documentation'
 
 // Types
-import type { App } from 'vue'
+import type { App, Plugin } from 'vue'
 
 export function registerPlugins (app: App) {
   app
     .use(router)
     .use(pinia)
-    .use(componentDocs as any)
+    .use(componentDocs as Plugin)
     .use(vuetify)
 }

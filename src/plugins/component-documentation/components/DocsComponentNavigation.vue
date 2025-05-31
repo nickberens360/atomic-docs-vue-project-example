@@ -19,22 +19,7 @@
 import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import DocsRecursiveNavItem from './DocsRecursiveNavItem.vue';
-
-interface ComponentItem {
-  type: 'component';
-  label: string;
-  relativePath: string;
-  exampleComponent: string;
-}
-
-interface DirectoryItem {
-  type: 'directory';
-  label: string;
-  relativePath: string;
-  children: Record<string, ComponentItem | DirectoryItem>;
-}
-
-type NavigationItem = ComponentItem | DirectoryItem;
+import { ComponentItem, DirectoryItem, NavigationItem, ComponentDocPlugin, ComponentNavItem, DirectoryNavItem, NavItem } from '../types';
 
 interface Props {
   filterText?: string;
@@ -47,10 +32,6 @@ const props = withDefaults(defineProps<Props>(), {
   onNavClick: null,
   bgColor: 'background'
 });
-
-interface ComponentDocPlugin {
-  convertPathToExampleName: (path: string) => string;
-}
 
 const componentDocPlugin = inject('componentDocPlugin') as ComponentDocPlugin;
 const router = useRouter();
@@ -98,23 +79,6 @@ const finalStructure = computed<Record<string, NavigationItem>>(() => {
   return filterNestedStructure(directoryStructure.value, props.filterText);
 });
 
-// Add these interfaces to match RecursiveNavItem.vue
-interface ComponentNavItem {
-  type: 'component';
-  label: string;
-  relativePath?: string;
-  exampleComponent?: string;
-}
-
-// Forward declaration of NavItem
-type NavItem = ComponentNavItem | DirectoryNavItem;
-
-interface DirectoryNavItem {
-  type: 'directory';
-  label: string;
-  relativePath?: string;
-  children: Record<string, NavItem>;
-}
 
 function handleNavClick(arg: NavItem): void {
   // Only process component items for navigation

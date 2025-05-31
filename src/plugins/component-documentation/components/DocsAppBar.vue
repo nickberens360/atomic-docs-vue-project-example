@@ -73,14 +73,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from "vue-router";
 import DocsComponentNavigation from "./DocsComponentNavigation.vue";
-
-// Import the ComponentItem interface from the types used in ComponentNavigation
-interface ComponentItem {
-  type: 'component';
-  label: string;
-  relativePath: string;
-  exampleComponent: string;
-}
+import { ComponentItem } from '../types';
 
 // Define props and emits
 const props = defineProps<{

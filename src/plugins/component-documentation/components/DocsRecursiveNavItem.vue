@@ -43,23 +43,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import DocsRecursiveNavItem from './DocsRecursiveNavItem.vue';
-
-// Define interfaces for the component's props
-interface ComponentNavItem {
-  type: 'component';
-  label: string;
-  relativePath?: string;
-  exampleComponent?: string;
-}
-
-interface DirectoryNavItem {
-  type: 'directory';
-  label: string;
-  relativePath?: string;
-  children: Record<string, NavItem>;
-}
-
-type NavItem = ComponentNavItem | DirectoryNavItem;
+import { ComponentNavItem, DirectoryNavItem, NavItem } from '../types';
 
 // Define props
 interface Props {
