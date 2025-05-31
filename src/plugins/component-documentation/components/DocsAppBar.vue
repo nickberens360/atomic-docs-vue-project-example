@@ -14,7 +14,7 @@
       <div class="docs-app-bar-actions">
         <div
           v-if="!isComponentDocsRoute"
-          class="docs-search-container mr-4"
+          class="docs-search-container"
         >
           <div class="docs-text-field">
             <div class="docs-input-wrapper">
@@ -51,7 +51,7 @@
           </div>
         </div>
 
-        <div class="docs-theme-toggle mr-4">
+        <div class="docs-theme-toggle">
           <span class="docs-theme-icon">
             {{ appStore.theme.isDark ? '🌙' : '☀️' }}
           </span>
@@ -160,6 +160,11 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .docs-app-bar {
+  position: fixed; /* Fixed positioning on mobile */
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   height: 64px;
@@ -167,24 +172,7 @@ onUnmounted(() => {
   background-color: var(--v-background-base, #f5f5f5);
   box-shadow: none;
   padding: 0 16px;
-  position: relative; /* Relative positioning on desktop */
   z-index: 100;
-}
-
-/* Media query for mobile devices */
-@media (max-width: 768px) {
-  .docs-app-bar {
-    position: fixed; /* Fixed positioning on mobile */
-    top: 0;
-    left: 0;
-    right: 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Add padding to the main content to prevent it from being hidden under the fixed header */
-  :deep(.v-main) {
-    padding-top: 64px;
-  }
 }
 
 .docs-app-bar-content {
@@ -228,6 +216,7 @@ onUnmounted(() => {
 
 .docs-search-container {
   position: relative;
+  margin-right: 16px;
 }
 
 .docs-text-field {
@@ -279,6 +268,7 @@ onUnmounted(() => {
 .docs-theme-toggle {
   display: flex;
   align-items: center;
+  margin-right: 16px;
 }
 
 .docs-theme-icon {
@@ -332,7 +322,4 @@ input:checked + .docs-slider:before {
   transform: translateX(20px);
 }
 
-.mr-4 {
-  margin-right: 16px;
-}
 </style>
