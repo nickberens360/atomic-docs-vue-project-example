@@ -37,20 +37,20 @@
         :close-on-content-click="false"
       >
         <template #activator="{ props }">
-          <v-chip
+          <DocsChip
             v-bind="props"
             :color="bgColor"
             variant="flat"
             :rounded="false"
             size="large"
             label
-            style="width: 100%;"
+            width="100%"
             class="d-flex justify-center"
           >
             Color
-          </v-chip>
+          </DocsChip>
         </template>
-        <v-color-picker
+        <DocsColorPicker
           v-model="bgColor"
           label="bgColor"
         />
@@ -70,6 +70,8 @@
 import BoxDemo from '@/components/BoxDemo.vue';
 import DocsSlider from '@/plugins/component-documentation/components/DocsSlider.vue';
 import DocsMenu from '@/plugins/component-documentation/components/DocsMenu.vue';
+import DocsChip from '@/plugins/component-documentation/components/DocsChip.vue';
+import DocsColorPicker from '@/plugins/component-documentation/components/DocsColorPicker.vue';
 
 const height = ref(150);
 const width = ref(150);
