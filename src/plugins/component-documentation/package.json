@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nickberens360/atomic-docs-vue-npm.git"
+    "url": "https://github.com/nickberens360/atomic-docs-vue-project-example.git"
   },
   "private": false,
   "devDependencies": {

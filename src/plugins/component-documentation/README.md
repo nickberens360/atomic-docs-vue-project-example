@@ -1,4 +1,4 @@
-# Component Documentation Plugin
+# Component Documentation Plugin Test
 
 This plugin is intended to provide a framework for documenting usage of components. Any `.vue` file found within the `/components` directory will be added to the list of components to document. The component index page can be found at the route `/component-docs` when running the project in development mode.
 
