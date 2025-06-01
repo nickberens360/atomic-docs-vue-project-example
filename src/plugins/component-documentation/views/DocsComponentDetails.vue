@@ -27,16 +27,10 @@
 import { computed, inject } from 'vue';
 import DocsComponentNotDocumented from '../components/DocsComponentNotDocumented.vue';
 import DocsContainer from '../components/DocsContainer.vue';
+import { ComponentDocPlugin } from '../types';
 
 // Define a custom type for component definitions
 type ComponentType = any;
-
-// Define the interface for the component documentation plugin
-interface ComponentDocPlugin {
-  convertPathToExampleName: (path: string) => string;
-  componentModules: Record<string, () => Promise<any>>;
-  exampleModules: Record<string, () => Promise<any>>;
-}
 
 // Define the interface for the example components
 interface ExampleComponent {
@@ -51,9 +45,11 @@ interface Props {
 
 const componentDocPlugin = inject('componentDocPlugin') as ComponentDocPlugin;
 const exampleComponents: Record<string, ExampleComponent> = {};
+// const componentModules = componentDocPlugin.options?.componentModules;
+const examplesDirName = componentDocPlugin?.examplesDirName;
 const importComponentPromises = Object.entries(componentDocPlugin.exampleModules)
   .map(async ([path, moduleImport]) => {
-    const relativePath = path.split('component-examples/').slice(1).join('');
+    const relativePath = path.split(`${examplesDirName}/`).slice(1).join('');
     const componentName = componentDocPlugin.convertPathToExampleName(relativePath);
     if (exampleComponents[componentName]) {
       throw new Error(`Component already registered with name: ${componentName}`);

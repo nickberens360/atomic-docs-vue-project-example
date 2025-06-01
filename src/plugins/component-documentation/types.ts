@@ -32,9 +32,20 @@ export interface DirectoryNavItem {
 
 export type NavItem = ComponentNavItem | DirectoryNavItem;
 
+// Configuration options interface
+export interface ComponentDocOptions {
+  dummyProperty?: string;
+  componentModules?: Record<string, () => Promise<any>>;
+  exampleModules?: Record<string, () => Promise<any>>;
+  // Add any other configuration options you need
+}
+
 // Plugin interface
 export interface ComponentDocPlugin {
   convertPathToExampleName: (path: string) => string;
   componentModules: Record<string, () => Promise<any>>;
   exampleModules: Record<string, () => Promise<any>>;
+  componentsDirName: string;
+  examplesDirName: string;
+  options?: ComponentDocOptions;
 }

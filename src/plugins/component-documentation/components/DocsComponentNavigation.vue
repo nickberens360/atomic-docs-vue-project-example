@@ -35,10 +35,13 @@ const props = withDefaults(defineProps<Props>(), {
 
 const componentDocPlugin = inject('componentDocPlugin') as ComponentDocPlugin;
 const router = useRouter();
+const componentModules = componentDocPlugin?.componentModules;
+const componentsDirName = componentDocPlugin?.componentsDirName;
+
 
 const directoryStructure = computed<Record<string, NavigationItem>>(() => {
-  return Object.keys(import.meta.glob('@/components/**/*.vue')).reduce<Record<string, NavigationItem>>((accumulator, filePath) => {
-    const relativePath = filePath.split('components/').slice(1).join('');
+  return Object.keys(componentModules).reduce<Record<string, NavigationItem>>((accumulator, filePath) => {
+    const relativePath = filePath.split(`${componentsDirName}/`).slice(1).join('');
     const exampleComponent = componentDocPlugin.convertPathToExampleName(relativePath);
     const pathSegments = relativePath.split('/');
     let lastRef = accumulator;

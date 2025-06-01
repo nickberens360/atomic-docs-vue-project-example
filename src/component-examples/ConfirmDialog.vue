@@ -8,7 +8,9 @@
     description="A confirmation dialog component that can be used to ask for user confirmation."
   >
     <div class="dialog-container">
-      <v-btn @click="showDialog">Open Dialog</v-btn>
+      <v-btn @click="showDialog">
+        Open Dialog
+      </v-btn>
       <ConfirmDialog ref="dialogRef" />
     </div>
   </ExampleComponentUsage>
